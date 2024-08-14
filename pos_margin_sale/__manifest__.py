@@ -16,14 +16,14 @@
     'category': 'Point of Sale',
     'version': '17.0.1.0',
 
-    'depends': ['base', 'point_of_sale', 'product', 'sale'],
+    'depends': ['base', 'point_of_sale', 'product', 'sale', 'stock_account'],
 
     'data': [
         'security/ir.model.access.csv',
         'wizard/sale_confirmation.xml',
         'wizard/wizard_margin_product.xml',
         'views/res_config_settings.xml',
-        'views/product_template_views.xml',
+        'views/products.xml',
         'views/sale_order.xml',
     ],
 
