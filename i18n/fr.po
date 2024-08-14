@@ -1,0 +1,158 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_margin_sale
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-12 03:32+0000\n"
+"PO-Revision-Date: 2024-08-12 03:32+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "*The price of this product is less than minimum sale price"
+msgstr "*Le prix de ce produit est inférieur au prix de vente minimum"
+
+#. module: pos_margin_sale
+#: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_template_inherit_pos_margin_sale
+msgid "<span class=\"oe_grey\"> %</span>"
+msgstr ""
+
+#. module: pos_margin_sale
+#: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: pos_margin_sale
+#: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
+msgid "Confirm"
+msgstr "Confirmer"
+
+#. module: pos_margin_sale
+#. odoo-python
+#: code:addons/pos_margin_sale/models/sale_order.py:0
+#, python-format
+msgid "Confirm minimum sale price"
+msgstr "Confirmer le prix de vente minimum"
+
+#. module: pos_margin_sale
+#: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
+msgid "Confirmation"
+msgstr "Confirmation"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "Customer Note"
+msgstr "Note client"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__display_name
+msgid "Display Name"
+msgstr "Nom d'affichage"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_product_product__margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_product_template__margin_sale
+msgid "Margin"
+msgstr "Marge"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__message
+msgid "Message"
+msgstr "Message"
+
+#. module: pos_margin_sale
+#: model:ir.model.fields,field_description:pos_margin_sale.field_product_product__minimum_sale_price
+#: model:ir.model.fields,field_description:pos_margin_sale.field_product_template__minimum_sale_price
+#: model:ir.model.fields,field_description:pos_margin_sale.field_sale_order_line__minimum_sale_price
+msgid "Minimum sale price"
+msgstr "Minimum sale price"
+
+#. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "Note"
+msgstr "Note"
+
+#. module: pos_margin_sale
+#: model:ir.model,name:pos_margin_sale.model_pos_session
+msgid "Point of Sale Session"
+msgstr "Session du point de vente"
+
+#. module: pos_margin_sale
+#: model:ir.model,name:pos_margin_sale.model_product_template
+msgid "Product"
+msgstr "Produit"
+
+#. module: pos_margin_sale
+#: model:ir.model,name:pos_margin_sale.model_product_product
+msgid "Product Variant"
+msgstr "Variante de produit"
+
+#. module: pos_margin_sale
+#: model:ir.model,name:pos_margin_sale.model_sale_confirmation_wizard
+msgid "Sale confirmation wizard"
+msgstr "Assistant de confirmation de vente"
+
+#. module: pos_margin_sale
+#: model:ir.model,name:pos_margin_sale.model_sale_order
+msgid "Sales Order"
+msgstr "Bon de commande"
+
+#. module: pos_margin_sale
+#: model:ir.model,name:pos_margin_sale.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Ligne de commande"
+
+#. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "With a"
+msgstr "Avec un"
+
+#. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "discount"
+msgstr "remise"
