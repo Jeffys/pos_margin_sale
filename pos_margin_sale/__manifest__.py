@@ -12,7 +12,7 @@
 
     'author': "Doodex",
     'website': "https://www.doodex.net",
-
+    'license': "AGPL-3",
     'category': 'Point of Sale',
     'version': '16.0.1.0',
 
@@ -40,4 +40,5 @@
     ],
     'application': True,
     'installable': True,
+    'images': ["static/description/banner.png"],
 }
