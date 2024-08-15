@@ -1,12 +1,25 @@
 from odoo import _, api, fields, models
 
 
+class ProductCategory(models.Model):
+    _inherit = 'product.category'
+
+
+    margin_sale = fields.Float('Margin')
+    
+
+
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    margin_sale = fields.Float(string="Margin", tracking=True)
+    margin_sale = fields.Float(string="Margin", tracking=True, compute="_compute_margin_sale", store=True, readonly=False)
     minimum_sale_price = fields.Float(string="Minimum sale price", compute='_compute_minimum_sale_price', 
                                       inverse='_inverse_minimum_sale_price', store=True, readonly=False)
+    
+    @api.depends('categ_id.margin_sale')
+    def _compute_margin_sale(self):
+        for rec in self:
+            rec.margin_sale = rec.categ_id.margin_sale
 
 
     @api.depends('margin_sale', 'standard_price')
@@ -35,7 +48,44 @@ class ProductTemplate(models.Model):
         }
 
 
-# class ProductProduct(models.Model):
-#     _inherit = 'product.S'
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
 
+    margin_sale = fields.Float(string="Margin", tracking=True, compute="_compute_margin_sale", store=True, readonly=False)
+    minimum_sale_price = fields.Float(string="Minimum sale price", compute="_compute_minimum_sale_price", inverse='_inverse_minimum_sale_price', store=True, readonly=False)
+    is_less_minimum_sale = fields.Boolean(string="Less minimum price", compute="_compute_warning")
+
+
+    def _compute_warning(self):
+        for rec in self:
+            rec.is_less_minimum_sale = rec.lst_price < rec.minimum_sale_price
+
+    @api.depends('categ_id.margin_sale')
+    def _compute_margin_sale(self):
+        for record in self:
+            record.margin_sale = record.product_tmpl_id.margin_sale
     
+    @api.depends('margin_sale', 'standard_price')
+    def _compute_minimum_sale_price(self):
+        for rec in self:
+            rec.minimum_sale_price = rec.standard_price * (1 + rec.margin_sale/100)
+
+    def _inverse_minimum_sale_price(self):
+        for rec in self:
+            if rec.standard_price:
+                rec.margin_sale = ((rec.minimum_sale_price / rec.standard_price) - 1) * 100
+            else:
+                rec.margin_sale = 0.0
+
+    def action_assign_margin(self):
+        wizard = self.env['wizard.margin.product'].create({
+            'product_ids': [(6, 0, self.ids)]
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Update margin sale'),
+            'view_mode': 'form',
+            'res_model': 'wizard.margin.product',
+            'target': 'new',
+            'res_id': wizard.id,
+        }

@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
         check_product = self.check_product_price()
         blocking_warning = self.env['ir.config_parameter'].sudo().get_param('post_margin_sale.blocking_transaction_order')
         if len(check_product) > 0 and not skip_check_price:
-            product_str = ('\n').join(f" {i + 1}. {product.display_name} minimum price is {product.currency_id.symbol}.{product.minimum_sale_price}" for i,product in enumerate(check_product))
+            product_str = ('\n').join(f" {i + 1}. {product.display_name} minimum price is {product.currency_id.symbol}. {product.minimum_sale_price}" for i,product in enumerate(check_product))
             message = f"Price of this product is less than minimum sale price \n\n{product_str}"
             if blocking_warning:
                 raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
@@ -35,11 +35,11 @@ class SaleOrder(models.Model):
         products = []
         for line in self.order_line:
             if line.price_unit < line.minimum_sale_price:
-                products.append(line.product_template_id)
+                products.append(line.product_id)
         return products
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
 
-    minimum_sale_price = fields.Float(string="Minimum sale price", related='product_template_id.minimum_sale_price')
+    minimum_sale_price = fields.Float(string="Minimum sale price", related='product_id.minimum_sale_price')

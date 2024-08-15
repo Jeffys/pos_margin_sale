@@ -8,12 +8,14 @@
             <form string="Assign Margin">
                 <sheet>
                     <group>
-                        <field name="product_template_ids" widget="many2many_tags"/>
+                        <field name="product_template_ids" widget="many2many_tags" invisible="not is_product"/>
+                        <field name="product_ids" widget="many2many_tags"  invisible="is_product"/>
                         <label for="margin"/>
                         <div class="d-inline-block" >
                           <field name="margin" widget="float" class="oe_inline o_input_6ch"/>
                           <span class="oe_grey"> %</span>
                         </div>
+                        <field name="is_product" invisible="1"/>
                     </group>
                 </sheet>
                 <footer>
