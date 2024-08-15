@@ -1,0 +1,22 @@
+.pos {
+    .order {
+      .orderline {
+        &.below-minimum-price {
+            .product-name {
+                color: red;
+            }
+            .price {
+                color: red;
+            }
+          .info {
+            color: red; // Applies to the entire info class
+            
+            em {
+              color: red; // Specifically targets the em tag within info
+            }
+          }
+        }
+      }
+    }
+  }
+  

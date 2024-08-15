@@ -14,7 +14,7 @@
     'website': "https://www.doodex.net",
 
     'category': 'Point of Sale',
-    'version': '17.0.1.0',
+    'version': '16.0.1.0',
 
     'depends': ['base', 'point_of_sale', 'product', 'sale', 'stock_account'],
 
@@ -28,8 +28,10 @@
     ],
 
     'assets': {
-        'point_of_sale._assets_pos': [
-            'pos_margin_sale/static/src/**/*',
+        'point_of_sale.assets': [
+            'pos_margin_sale/static/src/**/*.js',
+            'pos_margin_sale/static/src/**/*.xml',
+            'pos_margin_sale/static/src/**/*.scss',
         ]
     },
 
@@ -38,5 +40,4 @@
     ],
     'application': True,
     'installable': True,
-    'images': ["static/description/banner.png"],
 }
