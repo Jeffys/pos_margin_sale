@@ -58,7 +58,7 @@ You can set product margins based on categories without having to open products 
  After installation, you can configure the settings then check or uncheck the "Blocking Transaction Order" configuration.
 
 ## Compatibility
-Odoo version: 17.0
+Odoo version: 16.0
 
 ## License
 This module is licensed under [LGPLv3 licensed](./LICENSE)
