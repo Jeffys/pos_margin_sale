@@ -34,23 +34,24 @@ Support Complet : Nous offrons un support continu et des services de maintenance
 ## [Contactez-Nous](https://www.doodex.net/contactus)
 Si vous recherchez un partenaire capable de fournir des solutions Odoo personnalisées adaptées aux besoins de votre entreprise, ne cherchez pas plus loin que Doodex. Visitez notre site web à www.doodex.net pour en savoir plus sur nos services et découvrir comment nous pouvons vous aider à atteindre vos objectifs commerciaux.
 
-## [Rendez-vous Jitsi](index.html)
-Ce module Odoo ajoute l'intégration de Jitsi à la planification des rendez-vous. Il génère automatiquement un lien de réunion Jitsi unique pour chaque rendez-vous.
+Pos Margin Sale
+## [Vente sur marge de pos](index.html)
+Ce module calcule et applique le prix de vente minimum et la marge pour chaque produit. Il déclenche un avertissement si un produit est vendu en dessous de son prix minimum lors des ventes ou des commandes au point de vente, contribuant ainsi à maintenir la rentabilité.
 
 ## Fonctionnalités
-- **Génération et stockage automatiques de liens Jitsi**
-Génère automatiquement un lien de réunion Jitsi unique lors de la création d'un rendez-vous et le stocke dans un champ personnalisé (jitsi_link) dans le modèle calendar.event.
+- **Message d'avertissement pour un produit inférieur au prix de vente minimum sur la commande client du module**
+Il vous avertira automatiquement si un article est vendu en dessous de la norme de marge spécifiée.
 
-- **Notifications par e-mail intégrées**
-Personnalise l'e-mail de confirmation de rendez-vous pour inclure le lien de réunion Jitsi généré, garantissant ainsi que tous les participants reçoivent les détails nécessaires.
+- **Configuration Blocage du processus suivant lors d'une vente en dessous du prix minimum**
+Il arrêtera automatiquement le processus de passage à la page suivante si un prix de vente est inférieur au prix minimum.
 
-- **Sécurité renforcée**
-Garantit que chaque lien de réunion Jitsi est unique pour le rendez-vous, préservant ainsi la confidentialité et la sécurité des réunions.
+- **Setup Margin product bsae on category**
+Configurer la marge du produit bsae sur la catégorie
 
 ##Installation
-1. Téléchargez le module à partir de ce référentiel.
+1. Téléchargez le module depuis ce référentiel.
 2. Installez le module dans votre instance Odoo.
-3. Après l'installation, configurez les paramètres de l'API Jitsi selon vos besoins pour activer la fonction de génération automatique de liens.
+3. Installez le module Point de vente et le module de commande client. Après cela, vous pouvez installer les modules complémentaires de vente sur marge de point de vente.
 
 ##Compatibilité
 Version d'Odoo : 17.0
