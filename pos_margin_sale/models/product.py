@@ -51,16 +51,20 @@ class ProductTemplate(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    margin_sale = fields.Float(string="Margin", tracking=True, compute="_compute_margin_sale", store=True, readonly=False)
+    margin_sale = fields.Float(string="Margin", tracking=True, compute="_compute_margin_sale", inverse="_set_product_margin_sale", store=True, readonly=False)
     minimum_sale_price = fields.Float(string="Minimum sale price", compute="_compute_minimum_sale_price", inverse='_inverse_minimum_sale_price', store=True, readonly=False)
     is_less_minimum_sale = fields.Boolean(string="Less minimum price", compute="_compute_warning")
 
+    @api.onchange('margin_sale')
+    def _set_product_margin_sale(self):
+        for rec in self:
+            rec.product_tmpl_id.write({'margin_sale': rec.margin_sale})
 
     def _compute_warning(self):
         for rec in self:
             rec.is_less_minimum_sale = rec.lst_price < rec.minimum_sale_price
 
-    @api.depends('categ_id.margin_sale')
+    @api.depends('categ_id.margin_sale', 'product_tmpl_id.margin_sale')
     def _compute_margin_sale(self):
         for record in self:
             record.margin_sale = record.product_tmpl_id.margin_sale
