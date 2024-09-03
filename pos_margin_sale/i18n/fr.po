@@ -25,7 +25,7 @@ msgstr "*Le prix de ce produit est inférieur au prix de vente minimum"
 #. module: pos_margin_sale
 #: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_template_inherit_pos_margin_sale
 msgid "<span class=\"oe_grey\"> %</span>"
-msgstr ""
+msgstr "<span class=\"oe_grey\"> %</span>"
 
 #. module: pos_margin_sale
 #: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
@@ -75,7 +75,7 @@ msgstr "Nom d'affichage"
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__write_uid
@@ -103,7 +103,7 @@ msgstr "Message"
 #: model:ir.model.fields,field_description:pos_margin_sale.field_product_template__minimum_sale_price
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_order_line__minimum_sale_price
 msgid "Minimum sale price"
-msgstr "Minimum sale price"
+msgstr "Prix de vente minimum"
 
 #. module: pos_margin_sale
 #. odoo-javascript
