@@ -17,7 +17,7 @@
         </field>
     </record>
 
-    <record id="product_normal_form_view_inherit_margin_sale" model="ir.ui.view">
+    <!-- <record id="product_normal_form_view_inherit_margin_sale" model="ir.ui.view">
         <field name="name">product.normal.form.view.inherit.margin.sale</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
@@ -35,7 +35,7 @@
                 <field name="is_less_minimum_sale" invisible="1"/>
             </field>
         </field>
-    </record>
+    </record> -->
 <!-- 
     <record id="product_template_form_view_inherit_pos_margin_sale" model="ir.ui.view">
         <field name="name">product.template.form.view.inherit.pos.margin.sale</field>
@@ -68,7 +68,21 @@
                   <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
                   <span class="oe_grey"> %</span>
                 </div>
-                <field name="minimum_sale_price" widget="monetary" invisible="product_variant_count &gt; 1 and not is_product_variant"/>
+                <field name="is_product_variant" invisible="1"/>
+                <!-- <field name="minimum_sale_price" widget="monetary" invisible="product_variant_count &gt; 1 and not is_product_variant"/> -->
+
+                <label for="minimum_sale_price" invisible="product_variant_count &gt; 1 and not is_product_variant"/>
+                <div class="row" invisible="product_variant_count &gt; 1 and not is_product_variant">
+                    <div class="col-md-6">
+                        <field name="minimum_sale_price" widget="monetary"/>
+                    </div>
+                    <div class="col-md-2">
+                        <field name="minimum_sale_price_with_tax" widget="monetary" />
+                    </div>
+                    <div class="col-md-4">
+                        <span>Incl. Tax</span>
+                    </div>
+                </div>
             </field>
         </field>
     </record>
@@ -87,7 +101,20 @@
                   <field name="margin_sale" widget="float" class="oe_inline o_input_6ch" decoration-danger="margin_sale &lt; 0.0"/>
                   <span class="oe_grey"> %</span>
                 </div>
-                <field name="minimum_sale_price" widget="monetary"/>
+                <field name="is_product_variant" invisible="1"/>
+                <label for="minimum_sale_price" invisible="product_variant_count &gt; 1 and not is_product_variant"/>
+                <div class="row" invisible="product_variant_count &gt; 1 and not is_product_variant">
+                    <div class="col-md-6">
+                        <field name="minimum_sale_price" widget="monetary"/>
+                    </div>
+                    <div class="col-md-2">
+                        <field name="minimum_sale_price_with_tax" widget="monetary" />
+                    </div>
+                    <div class="col-md-4">
+                        <span>Incl. Tax</span>
+                    </div>
+                </div>
+                <!-- <field name="minimum_sale_price" widget="monetary"/> -->
                 <field name="is_less_minimum_sale" invisible="1" />
             </group>
         </field>

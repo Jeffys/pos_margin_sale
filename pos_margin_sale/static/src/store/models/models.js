@@ -10,6 +10,10 @@ import { ErrorPopup } from "@point_of_sale/app/errors/popups/error_popup";
 patch(Product.prototype, {
     get_minimum_sale_price() {
         return this.minimum_sale_price;
+    },
+
+    get_minimum_sale_price_with_tax() {
+        return this.minimum_sale_price_with_tax;
     }
 })
 
@@ -40,7 +44,8 @@ patch(Orderline.prototype, {
                 ? this.findAttribute(this.attribute_value_ids, this.custom_attribute_value_ids)
                 : [],
             minimumSalePrice: this.env.utils.formatCurrency(this.product.get_minimum_sale_price()), // Added minimum_sale_price
-            isLessMinimumSalePrice: this.get_unit_display_price() < this.product.get_minimum_sale_price()
+            minimumSalePriceWithTax:  this.env.utils.formatCurrency(this.product.get_minimum_sale_price_with_tax()),
+            isLessMinimumSalePrice: this.get_unit_display_price() < this.product.get_minimum_sale_price_with_tax()
         };
     }
 
@@ -49,7 +54,7 @@ patch(Orderline.prototype, {
 patch(Order.prototype, {
     async pay() {
         const orderLines = this.get_orderlines();
-        const lines = orderLines.filter(line => line.get_unit_display_price() < line.product.get_minimum_sale_price());
+        const lines = orderLines.filter(line => line.get_unit_display_price() < line.product.get_minimum_sale_price_with_tax());
         const blocked = this.pos.config.is_blocked_warning
         if (lines.length > 0) {
             // Display the confirmation popup with the constructed message
