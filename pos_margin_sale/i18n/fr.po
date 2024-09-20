@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-03 06:56+0000\n"
-"PO-Revision-Date: 2024-09-03 06:56+0000\n"
+"POT-Creation-Date: 2024-08-12 03:32+0000\n"
+"PO-Revision-Date: 2024-08-12 03:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,54 +23,14 @@ msgid "*The price of this product is less than minimum sale price"
 msgstr "*Le prix de ce produit est inférieur au prix de vente minimum"
 
 #. module: pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_category_form_view_inherit_margin_sale
 #: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_template_inherit_pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_variant_easy_edit_view_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.wizard_margin_product_view_form
 msgid "<span class=\"oe_grey\"> %</span>"
-msgstr ""
-
-#. module: pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_template_inherit_pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.product_variant_easy_edit_view_margin_sale
-msgid "<span>Incl. Tax</span>"
-msgstr ""
-
-#. module: pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.wizard_margin_product_view_form
-msgid "Assign"
-msgstr "Assigner"
-
-#. module: pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.wizard_margin_product_view_form
-msgid "Assign Margin"
-msgstr "Assigner une Marge"
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_pos_config__is_blocked_warning
-msgid "Blocked warning"
-msgstr "Avertissement bloqué"
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_res_config_settings__blocking_transaction_order
-msgid "Blocking Transaction Order"
-msgstr "Blocage des ventes"
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_res_config_settings__blocking_transaction_pos
-msgid "Blocking Transaction POS"
-msgstr "Blocage des transactions POS"
+msgstr "<span class=\"oe_grey\"> %</span>"
 
 #. module: pos_margin_sale
 #: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.wizard_margin_product_view_form
 msgid "Cancel"
 msgstr "Annuler"
-
-#. module: pos_margin_sale
-#: model:ir.model,name:pos_margin_sale.model_res_config_settings
-msgid "Config Settings"
-msgstr "Paramètres de configuration"
 
 #. module: pos_margin_sale
 #: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
@@ -78,63 +38,65 @@ msgid "Confirm"
 msgstr "Confirmer"
 
 #. module: pos_margin_sale
+#. odoo-python
+#: code:addons/pos_margin_sale/models/sale_order.py:0
+#, python-format
+msgid "Confirm minimum sale price"
+msgstr "Confirmer le prix de vente minimum"
+
+#. module: pos_margin_sale
 #: model_terms:ir.ui.view,arch_db:pos_margin_sale.sale_confirmation_wizard_view_form
 msgid "Confirmation"
-msgstr ""
+msgstr "Confirmation"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__create_uid
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__create_uid
 msgid "Created by"
 msgstr "Créé par"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__create_date
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__create_date
 msgid "Created on"
 msgstr "Créé le"
 
 #. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "Customer Note"
+msgstr "Note client"
+
+#. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__display_name
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__display_name
 msgid "Display Name"
 msgstr "Nom d'affichage"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__id
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__write_uid
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__write_uid
 msgid "Last Updated by"
 msgstr "Dernière mise à jour par"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__write_date
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__write_date
 msgid "Last Updated on"
 msgstr "Dernière mise à jour le"
 
 #. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_product_product__is_less_minimum_sale
-msgid "Less minimum price"
-msgstr "Moins que le prix minimum"
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_product_category__margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_product_product__margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_product_template__margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__margin
 msgid "Margin"
 msgstr "Marge"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_sale_confirmation_wizard__message
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #. module: pos_margin_sale
 #: model:ir.model.fields,field_description:pos_margin_sale.field_product_product__minimum_sale_price
@@ -144,15 +106,12 @@ msgid "Minimum sale price"
 msgstr "Prix de vente minimum"
 
 #. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_product_product__minimum_sale_price_with_tax
-#: model:ir.model.fields,field_description:pos_margin_sale.field_product_template__minimum_sale_price_with_tax
-msgid "Minimum sale price (Tax include)"
-msgstr "Prix de vente minimum (Tax Incl)"
-
-#. module: pos_margin_sale
-#: model:ir.model,name:pos_margin_sale.model_pos_config
-msgid "Point of Sale Configuration"
-msgstr "Configuration du point de vente"
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "Note"
+msgstr "Note"
 
 #. module: pos_margin_sale
 #: model:ir.model,name:pos_margin_sale.model_pos_session
@@ -160,37 +119,14 @@ msgid "Point of Sale Session"
 msgstr "Session du point de vente"
 
 #. module: pos_margin_sale
-#. odoo-javascript
-#: code:addons/pos_margin_sale/static/src/store/models/models.js:0
-#: code:addons/pos_margin_sale/static/src/store/models/models.js:0
-#, python-format
-msgid "Price unit less than minimum price"
-msgstr "Prix unitaire inférieur au prix minimum"
-
-#. module: pos_margin_sale
 #: model:ir.model,name:pos_margin_sale.model_product_template
 msgid "Product"
 msgstr "Produit"
 
 #. module: pos_margin_sale
-#: model:ir.model,name:pos_margin_sale.model_product_category
-msgid "Product Category"
-msgstr "Catégorie de produits"
-
-#. module: pos_margin_sale
 #: model:ir.model,name:pos_margin_sale.model_product_product
 msgid "Product Variant"
 msgstr "Variante de produit"
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__product_ids
-msgid "Product variants"
-msgstr "Variantes de Produits"
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__product_template_ids
-msgid "Products"
-msgstr "Produits"
 
 #. module: pos_margin_sale
 #: model:ir.model,name:pos_margin_sale.model_sale_confirmation_wizard
@@ -208,46 +144,15 @@ msgid "Sales Order Line"
 msgstr "Ligne de commande"
 
 #. module: pos_margin_sale
-#: model:ir.model,name:pos_margin_sale.model_wizard_margin_product
-msgid "Set margin on every product"
-msgstr "Définir la marge sur chaque produit"
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "With a"
+msgstr "Avec un"
 
 #. module: pos_margin_sale
 #. odoo-javascript
-#: code:addons/pos_margin_sale/static/src/store/models/models.js:0
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
 #, python-format
-msgid "Some products are below the minimum price. Please check !"
-msgstr ""
-"Certains produits sont en dessous du prix minimum. Veuillez vérifier !"
-
-#. module: pos_margin_sale
-#. odoo-javascript
-#: code:addons/pos_margin_sale/static/src/store/models/models.js:0
-#, python-format
-msgid "Some products are below the minimum price. Proceed to payment?"
-msgstr ""
-"Certains produits sont en dessous du prix minimum. Continuer vers le "
-"paiement ?"
-
-#. module: pos_margin_sale
-#. odoo-python
-#: code:addons/pos_margin_sale/models/product.py:0
-#: code:addons/pos_margin_sale/models/product.py:0
-#: model:ir.actions.server,name:pos_margin_sale.product_product_margin_sale_action_server
-#: model:ir.actions.server,name:pos_margin_sale.product_template_margin_sale_action_server
-#, python-format
-msgid "Update margin sale"
-msgstr "Marge minimum"
-
-#. module: pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.res_config_settings_view_form_pos_margin_sale
-#: model_terms:ir.ui.view,arch_db:pos_margin_sale.res_config_settings_view_form_sale_margin_sale
-msgid ""
-"Warning price less than minimum sale price will blocking the transaction."
-msgstr ""
-"Si le prix de vente ne respecte pas la marge minimum, la vente est bloquée."
-
-#. module: pos_margin_sale
-#: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__is_product
-msgid "is product"
-msgstr "est produit"
+msgid "discount"
+msgstr "remise"
