@@ -13,12 +13,16 @@ class SaleOrder(models.Model):
         blocking_warning = self.env['ir.config_parameter'].sudo().get_param('post_margin_sale.blocking_transaction_order')
         if len(check_product) > 0 and not skip_check_price:
             product_str = ('\n').join(f" {i + 1}. {product.display_name} minimum price is {product.currency_id.symbol}. {product.minimum_sale_price:.2f}" for i,product in enumerate(check_product))
-            message = f"Price of this product is less than minimum sale price \n\n{product_str}"
+            message = (_(f"Price of this product is less than minimum sale price \n\n{product_str}"))
+            message_Fr = f"Le prix de ce produit est inférieur au prix de vente minimum \n\n{product_str}"
             if blocking_warning:
                 raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
             else:
                 message += "\n\nDo you want to continue with the quotation for making sale order?"
+                message_Fr += "\n\nVoulez-vous continuer avec le devis pour passer commande ?"
                 wizard = self.env['sale.confirmation.wizard'].create({'message': message})
+                wizard.with_context(lang='fr_FR').write({
+                'message': message_Fr})
                 return {
                     'type': 'ir.actions.act_window',
                     'name': _('Confirm minimum sale price'),

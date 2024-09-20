@@ -6,7 +6,7 @@ class SaleConfirmationWizard(models.TransientModel):
     _name = 'sale.confirmation.wizard'
     _description = "Sale confirmation wizard"
 
-    message = fields.Text(string="Message")
+    message = fields.Text(string="Message",translate=True)
 
 
     def action_confirm(self):
