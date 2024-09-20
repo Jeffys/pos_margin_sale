@@ -13,8 +13,9 @@ class SaleOrder(models.Model):
         blocking_warning = self.env['ir.config_parameter'].sudo().get_param('post_margin_sale.blocking_transaction_order')
         if len(check_product) > 0 and not skip_check_price:
             product_str = ('\n').join(f" {i + 1}. {product.display_name} minimum price is {product.currency_id.symbol}. {product.minimum_sale_price:.2f}" for i,product in enumerate(check_product))
+            product_str_fr = ('\n').join(f" {i + 1}. {product.display_name} le prix minimum est {product.currency_id.symbol}. {product.minimum_sale_price:.2f}" for i,product in enumerate(check_product))
             message = (_(f"Price of this product is less than minimum sale price \n\n{product_str}"))
-            message_Fr = f"Le prix de ce produit est inférieur au prix de vente minimum \n\n{product_str}"
+            message_Fr = f"Le prix de ce produit est inférieur au prix de vente minimum \n\n{product_str_fr}"
             if blocking_warning:
                 raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
             else:
