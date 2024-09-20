@@ -19,7 +19,7 @@ class SaleOrder(models.Model):
             user_language = self.detect_user_language()
             if blocking_warning:
                     if user_language == 'French':
-                        raise ValidationError(_(f"{message} \n\nTransaction bloquée car prix inférieur au prix minimum de vente."))
+                        raise ValidationError(_(f"{message_Fr} \n\nTransaction bloquée car prix inférieur au prix minimum de vente."))
                     else:
                         raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
             else:
