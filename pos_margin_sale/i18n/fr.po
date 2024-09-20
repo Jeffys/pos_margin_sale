@@ -247,3 +247,19 @@ msgstr "Avertissement : un prix inférieur au prix de vente minimum bloquera la
 #: model:ir.model.fields,field_description:pos_margin_sale.field_wizard_margin_product__is_product
 msgid "is product"
 msgstr "is Produit"
+
+
+#. module: pos_margin_sale
+#. odoo-python
+#: code:addons/pos_margin_sale/models/sale_order.py:0
+#, python-format
+msgid "Confirm minimum sale price"
+msgstr "Confirmer le prix de vente minimum"
+
+#. module: pos_margin_sale
+#. odoo-javascript
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#: code:addons/pos_margin_sale/static/src/store/orderline.xml:0
+#, python-format
+msgid "Customer Note"
+msgstr "Note client"
