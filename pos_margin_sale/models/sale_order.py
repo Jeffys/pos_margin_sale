@@ -16,8 +16,12 @@ class SaleOrder(models.Model):
             product_str_fr = ('\n').join(f" {i + 1}. {product.display_name} le prix minimum est {product.currency_id.symbol}. {product.minimum_sale_price:.2f}" for i,product in enumerate(check_product))
             message = (_(f"Price of this product is less than minimum sale price \n\n{product_str}"))
             message_Fr = f"Le prix de ce produit est inférieur au prix de vente minimum \n\n{product_str_fr}"
+            user_language = self.detect_user_language()
             if blocking_warning:
-                raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
+                    if user_language == 'French':
+                        raise ValidationError(_(f"{message} \n\nTransaction bloquée car prix inférieur au prix minimum de vente."))
+                    else:
+                        raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
             else:
                 message += "\n\nDo you want to continue with the quotation for making sale order?"
                 message_Fr += "\n\nVoulez-vous continuer avec le devis pour passer commande ?"
@@ -34,7 +38,15 @@ class SaleOrder(models.Model):
                 }
         return super(SaleOrder, self).action_confirm()
 
-            
+    def detect_user_language(self):
+        # Get the user's language from the context
+        user_lang = self.env.context.get('lang', 'en_US')  # Default to English if not set
+
+        # Check if the user language is French
+        if user_lang.startswith('fr'):
+            return 'French'
+        else:
+            return 'Other'
 
     def check_product_price(self):
         products = []
