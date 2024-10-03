@@ -16,7 +16,13 @@
     'category': 'Point of Sale',
     'version': '17.0.1.0',
 
-    'depends': ['base', 'point_of_sale', 'product', 'sale', 'stock_account'],
+    'depends': [
+        'base', 
+        # 'point_of_sale', 
+        'product', 
+        'sale', 
+        'stock_account'
+    ],
 
     'data': [
         'security/ir.model.access.csv',
@@ -28,9 +34,9 @@
     ],
 
     'assets': {
-        'point_of_sale._assets_pos': [
-            'pos_margin_sale/static/src/**/*',
-        ]
+        # 'point_of_sale._assets_pos': [
+        #     'pos_margin_sale/static/src/**/*',
+        # ]
     },
 
     'demo': [
