@@ -26,11 +26,11 @@
 
     'data': [
         'security/ir.model.access.csv',
-        'wizard/sale_confirmation.xml',
+        # 'wizard/sale_confirmation.xml',
         'wizard/wizard_margin_product.xml',
         'views/res_config_settings.xml',
         'views/products.xml',
-        'views/sale_order.xml',
+        # 'views/sale_order.xml',
     ],
 
     'assets': {
