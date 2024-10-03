@@ -14,8 +14,7 @@ class SaleConfirmationWizard(models.TransientModel):
         active_id = self._context.get('active_ids')
         if active_model == 'sale.order':
             sale = self.env[active_model].browse(active_id)
-            sale.with_context(skip_check_price=True).action_confirm()
-
-    
-
-            
+            if any(line.product_id.is_rental for line in sale.order_line):
+                sale.with_context(skip_check_price=True).action_confirm()
+            else:
+                sale.action_confirm()
