@@ -1,7 +1,3 @@
-from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
-
-
 class SaleConfirmationWizard(models.TransientModel):
     _name = 'sale.confirmation.wizard'
     _description = "Sale confirmation wizard"
@@ -11,7 +7,7 @@ class SaleConfirmationWizard(models.TransientModel):
     def action_confirms(self):
         active_model = self._context.get('active_model')
         active_ids = self._context.get('active_ids', [])
-        
+
         if active_model == 'sale.order':
             sale = self.env[active_model].browse(active_ids)
 
