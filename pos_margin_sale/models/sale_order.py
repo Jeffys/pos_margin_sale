@@ -28,14 +28,14 @@ class SaleOrder(models.Model):
             message_fr = f"Le prix de ce produit est inférieur au prix de vente minimum \n\n{product_str_fr}"
             user_language = self.detect_user_language()
 
-            if blocking_warning:
-                if user_language == 'French':
-                    raise ValidationError(_(f"{message_fr} \n\nTransaction bloquée car prix inférieur au prix minimum de vente."))
-                else:
-                    raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
-            else:
-                message += "\n\nDo you want to continue with the quotation for making sale order?"
-                message_fr += "\n\nVoulez-vous continuer avec le devis pour passer commande ?"
+            # if blocking_warning:
+            #     if user_language == 'French':
+            #         raise ValidationError(_(f"{message_fr} \n\nTransaction bloquée car prix inférieur au prix minimum de vente."))
+            #     else:
+            #         raise ValidationError(_(f"{message} \n\nTransaction blocked due to price being lower than the minimum sale price."))
+            # else:
+            #     message += "\n\nDo you want to continue with the quotation for making sale order?"
+            #     message_fr += "\n\nVoulez-vous continuer avec le devis pour passer commande ?"
                 
                 # Create the wizard with both English and French messages
                 wizard = self.env['sale.confirmation.wizard'].create({'message': message})
