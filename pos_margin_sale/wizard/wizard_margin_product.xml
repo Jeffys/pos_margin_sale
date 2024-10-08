@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
     <record id="wizard_margin_product_view_form" model="ir.ui.view">
         <field name="name">wizard.margin.product.view.form</field>
         <field name="model">wizard.margin.product</field>
@@ -24,4 +25,7 @@
             </form>
         </field>
     </record>
+
+
+
 </odoo>
