@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Odoo Debug",
+            "type": "debugpy",
+            "console": "integratedTerminal",
+            "python": "/opt/odoo/venv/bin/python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "program": "/opt/odoo/odoo/odoo-bin",
+            "args": [
+                "--config=/etc/odoo.conf",  
+                "--dev=all"
+            ],
+            "justMyCode": false
+            
+        }
+    ]
+}
