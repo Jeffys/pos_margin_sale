@@ -7,7 +7,13 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
 
+    is_rental_order = fields.Boolean(string="Rental Order", default=False)  
+
     def action_confirm(self):
+
+        if self.is_rental_order:
+            return super(SaleOrder, self).action_confirm()  
+
         skip_check_price = self._context.get('skip_check_price')
         check_product = self.check_product_price()
         blocking_warning = self.env['ir.config_parameter'].sudo().get_param('post_margin_sale.blocking_transaction_order')
@@ -50,6 +56,11 @@ class SaleOrder(models.Model):
 
     def check_product_price(self):
         products = []
+
+    # Skip checking if this is a rental order
+        if self.is_rental_order:
+            return products # Empty list, so no validation error will trigger
+
         for line in self.order_line:
             if line.price_unit < line.minimum_sale_price:
                 products.append(line.product_id)
