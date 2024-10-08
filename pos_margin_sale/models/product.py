@@ -1,12 +1,14 @@
 from odoo import _, api, fields, models
 
+
 class ProductCategory(models.Model):
     _inherit = 'product.category'
 
 
     margin_sale = fields.Float('Margin')
     
-    
+
+
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 

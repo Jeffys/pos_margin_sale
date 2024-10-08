@@ -34,11 +34,11 @@
     ],
 
     'assets': {
-        # 'point_of_sale.assets': [
-        #     'pos_margin_sale/static/src/**/*.js',
-        #     'pos_margin_sale/static/src/**/*.xml',
-        #     'pos_margin_sale/static/src/**/*.scss',
-        # ]
+        'point_of_sale.assets': [
+            'pos_margin_sale/static/src/**/*.js',
+            'pos_margin_sale/static/src/**/*.xml',
+            'pos_margin_sale/static/src/**/*.scss',
+        ]
     },
 
     'demo': [

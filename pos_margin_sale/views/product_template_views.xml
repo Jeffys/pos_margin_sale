@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <field name="list_price" position="replace">
                 <field name="list_price" decoration-danger="list_price &lt; minimum_sale_price" widget="monetary"/>
+
             </field>
             <field name="categ_id" position="before">
                 <label for="margin_sale"/>
@@ -16,6 +17,8 @@
                   <span class="oe_grey"> %</span>
                 </div>
                 <field name="minimum_sale_price" widget="monetary"/>
+                <field name="minimum_sale_price_with_tax" widget="monetary" />
+
             </field>
         </field>
     </record>
