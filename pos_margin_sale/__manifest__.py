@@ -25,12 +25,12 @@
     ],
 
     'data': [
-        'security/ir.model.access.csv',
-        'wizard/sale_confirmation.xml',
+        'security/ir.model.access.csv',          # Always load security first
+        'views/res_config_settings.xml',         # Configuration views should come next
+        'views/products.xml',                    # Product view (usually referenced in sale order, so load before)
+        'views/sale_order.xml',                  # Sale order view depends on products, so it comes after
+        'wizard/sale_confirmation.xml',          # Wizard files related to sale confirmation
         'wizard/wizard_margin_product.xml',
-        'views/res_config_settings.xml',
-        'views/products.xml',
-        'views/sale_order.xml',
     ],
 
     'assets': {
