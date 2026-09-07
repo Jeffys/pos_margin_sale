@@ -1,122 +1,1286 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pin Message</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pin Message in Chatter for Odoo 19 &mdash; pin important log notes to the top of any record</title>
+<meta
+         name="description"
+         content="Pin any log note in the Odoo chatter and it moves to a collapsible Pinned Messages panel
+at the top of the record, with a count badge and live updates. Works on every model.
+Odoo 19.0, by Doodex."
+      />
 </head>
-<body style="font-family: 'Roboto', sans-serif; margin: 0; padding: 0; box-sizing: border-box; background-color: #fff; color: #333;">
+<body>
+<!--
+  ==========================================================================
+  Pin Message in Chatter  &middot;  Odoo Apps Store listing &middot; Odoo 19.0
+  Doodex  &middot;  odoo@doodex.net
 
-<header class="hero" style="background-color: #ebac55; color: #fff; text-align: center; padding: 100px 20px; position: relative;">
-    <div class="logos" style="margin-bottom: 20px;">
-        <img src="./assets/doodex_odoo.png" alt="Company Logo" style="max-height: 100px;">
-    </div>
-    <h1 style="font-size: 3rem; color: #ffffff; font-weight: 700;">Pin Message in Chatter</h1>
-    <p style="font-size: 1.25rem; font-weight: 400;"> This module is used to pin important messages in the chatter in Odoo.</p>
-    <!-- <a href="https://www.doodex.net/en/blog/doodex-blog-2/probabilite-crm-par-etape-99#blog_content" class="btn btn-light btn-lg mt-4" style="background-color: #fff; color: #685563; border: none; padding: 10px 20px; text-decoration: none;">Learn More</a> -->
-</header>
+  SOURCE OF TRUTH. Edit this file, then run:
+      python3 tools/build.py  pin-message-v17-product-description
+      python3 tools/verify.py pin-message-v17-product-description
 
-<div class="container" style="padding: 40px 20px;">
-    <section id="features" class="features-section" style="background-color: #ebac55; color: #fff; padding: 40px 20px;">
-        <h2 style="font-weight: 700; text-align: center; color: #ffffff;">Features</h2>
-        <div class="row">
-            <div style="font-size: 1.25rem;  font-weight: 300; background-color: #ebac55; color: #ffffff; border: none; margin: 20px 0; border-radius: 8px; padding: 20px;">
-                <p style="font-weight: 400;">
-                    This module allows users to pin important messages in the chatter of Odoo, helping highlight and preserve key information within a record's communication history. In addition to pinning, users can also easily view all pinned messages in a dedicated section, making it easier to access and reference crucial discussions without having to scroll through the entire message thread. This improves collaboration, traceability, and efficiency in managing communication in Odoo.
-                </p>
+  NO PRICE ON THIS PAGE. The store shows the price itself, in the buyer's own
+  currency, right beside the Buy button &mdash; repeating a figure in the description
+  only creates a second number to keep in sync and a mismatch when it moves.
+  Do not reintroduce a price section, a hero price chip or a "Price" row in the
+  spec table. The one exception, deliberate, is the cross-sell cards at the
+  bottom: those name the sibling modules' prices because that page is not the
+  one the reader is standing on.
+
+  Archetype C (Product-led / Screenshot-first) &middot; hero H-4 compact &middot; rhythm
+  R-1 all white separated by hairlines &middot; features F-1 icon rows &middot; accent
+  A-1 restrained.
+  Deliberately unlike POS Margin Threshold (Archetype B, split hero, zigzag,
+  violet interludes) and Sale Margin Threshold (Archetype D, violet hero,
+  comparison tables). Here the screenshot showcase IS the argument and the
+  copy is caption.
+
+  THE SHOWCASE CARRIES NO SCRIPT AND DEPENDS ON NO SCRIPT. The six steps are
+  a native <details>/<summary> group with a shared name=, so the browser does
+  the switching. Nothing here needs the store page's Bootstrap to initialise,
+  and step 1 is marked `open` so a screenshot shows at first paint.
+
+  LINK POLICY &mdash; identical to the sibling listings. The booking and WhatsApp
+  destinations are NAKED LINKS: an <a> with NO href, the URL printed as the
+  visible label and encoded in a real QR image beside it. Only mailto: and
+  in-page #anchors carry an href. Do not put an http(s) URL into an href.
+
+  Class names are prefixed .pmc* because the store page may load its own
+  Bootstrap and we must not collide with it. No Bootstrap-owned class name
+  (nav, nav-pills, nav-link, tab-content, tab-pane, active, show) is used
+  anywhere on this page any more &mdash; nothing on it borrows another
+  framework's behaviour.
+  ==========================================================================
+-->
+
+<style>
+/* ------------------------------------------------------------------------
+   THIS BLOCK IS NOT LOAD-BEARING. Odoo's html_sanitize() lists `style` in
+   kill_tags, so on the live store this element is deleted outright. Every
+   declaration that the design actually needs lives in a style="" attribute
+   on the element itself, and the layout lives in Bootstrap 5 utility
+   classes, which the store page already serves and the sanitiser keeps.
+
+   What is left here is only:
+     * a local stand-in for the handful of Bootstrap utilities the page uses,
+       so the file still lays out correctly when opened straight off disk
+       with no stylesheet at all (values are Bootstrap 5's own, so when
+       Bootstrap IS present nothing changes);
+     * hover, focus and [open] states, and the media queries - progressive
+       enhancement that the page is designed to look correct without.
+
+   Do not move anything load-bearing back in here.
+   ------------------------------------------------------------------------ */
+.pmc, .pmc *, .pmc *::before, .pmc *::after { box-sizing: border-box; }
+.pmc .row { display: flex; flex-wrap: wrap; margin-right: -12px; margin-left: -12px; }
+.pmc .row > * { flex: 0 0 auto; width: 100%; padding-right: 12px; padding-left: 12px; }
+.pmc .g-0 { margin-right: 0; margin-left: 0; }
+.pmc .g-0 > * { padding-right: 0; padding-left: 0; }
+.pmc .g-3 { margin-top: -16px; } .pmc .g-3 > * { margin-top: 16px; }
+.pmc .g-4 { margin-top: -24px; } .pmc .g-4 > * { margin-top: 24px; }
+.pmc .col-12 { width: 100%; }
+.pmc .col-6 { width: 50%; }
+/* `col` and `col-auto` carry no breakpoint, so they must hold at every width.
+   Without them `.row > * { width: 100% }` wins and each child takes a full
+   line - which is exactly how the six showcase summary rows came out stacked
+   four lines tall (badge / STEP n / title / chevron) instead of one row. */
+.pmc .col-auto { flex: 0 0 auto; width: auto; }
+.pmc .col { flex: 1 0 0%; width: auto; max-width: 100%; }
+.pmc .flex-shrink-0 { flex-shrink: 0; }
+.pmc .flex-grow-1 { flex-grow: 1; }
+.pmc .d-flex { display: flex; }
+.pmc .d-inline-flex { display: inline-flex; }
+.pmc .flex-column { flex-direction: column; }
+.pmc .flex-wrap { flex-wrap: wrap; }
+.pmc .align-items-start { align-items: flex-start; }
+.pmc .align-items-center { align-items: center; }
+.pmc .justify-content-center { justify-content: center; }
+.pmc .justify-content-between { justify-content: space-between; }
+.pmc .table-responsive { overflow-x: auto; }
+@media (min-width: 768px) {
+  .pmc .col-md-4 { width: 33.33333333%; }
+  .pmc .col-md-5 { width: 41.66666667%; }
+  .pmc .col-md-6 { width: 50%; }
+  .pmc .col-md-7 { width: 58.33333333%; }
+  .pmc .col-md-3 { width: 25%; }
+  .pmc .col-md-auto { width: auto; }
+  .pmc .col-md { flex: 1 0 0%; width: auto; }
+}
+</style>
+
+<div class="pmc" style="color:#525252;font-family:Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;font-size:16px;line-height:1.65;text-align:left;background-color:#ffffff">
+         <!-- ============================== HEADER ============================== -->
+         <header class="pmchdr" style="border-bottom:1px solid #ece4f3;background-color:rgb(255, 255, 255)">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <div class="pmchdr-in d-flex flex-wrap align-items-center justify-content-between" style="padding:13px 0px;margin-bottom:-14px">
+                  <div class="pmcbrand d-inline-flex align-items-center" style="font-size:15px;font-weight:800;color:#270140;letter-spacing:-0.02em;white-space:nowrap;margin-right:14px;margin-bottom:14px">
+                     <img class="tile flex-shrink-0" src="./icon.png" width="28" height="28" alt="The Pin Message in Chatter icon: a blue push pin." style="max-width:100%;width:28px;height:28px;display:block;margin-left:-6px;min-width:28px;margin-right:3px">
+                     <span>Pin Message in Chatter</span>
+                  </div>
+                  <nav class="jump d-flex flex-wrap justify-content-center" style="margin-right:14px;margin-bottom:13px">
+                     <a href="#pmc-tour" style="color:#171717;text-decoration:none;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9999px;white-space:nowrap;margin-right:1px;margin-bottom:1px">See it work</a>
+                     <a href="#pmc-features" style="color:#171717;text-decoration:none;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9999px;white-space:nowrap;margin-right:1px;margin-bottom:1px">Features</a>
+                     <a href="#pmc-detail" style="color:#171717;text-decoration:none;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9999px;white-space:nowrap;margin-right:1px;margin-bottom:1px">In motion</a>
+                     <a href="#pmc-requirements" style="color:#171717;text-decoration:none;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9999px;white-space:nowrap;margin-right:1px;margin-bottom:1px">Requirements</a>
+                     <a href="#pmc-faq" style="color:#171717;text-decoration:none;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9999px;white-space:nowrap;margin-right:1px;margin-bottom:1px">FAQ</a>
+                     <a href="#pmc-releases" style="color:#171717;text-decoration:none;font-size:12.5px;font-weight:600;padding:7px 9px;border-radius:9999px;white-space:nowrap;margin-bottom:1px">Releases</a>
+                  </nav>
+                  <a class="pmcbtn pmcbtn-1 hdr-cta d-inline-flex align-items-center justify-content-center" href="mailto:odoo@doodex.net" style="color:rgb(255, 255, 255);font-weight:700;font-size:13px;text-decoration:none;padding:9px 15px;border-radius:10px;line-height:1.25;background-color:#fa7268;margin-bottom:14px">Ask Doodex</a>
+               </div>
             </div>
-        </div>
-    </section>
+         </header>
 
-    <section id="how_to_use" class="image-section" style="text-align: center; padding: 40px 20px;">
-        <h2>How to use it</h2>
-        <img src="./assets/step_1.png" alt="step 1" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
-        <img src="./assets/step_2.png" alt="step 2" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
-        <img src="./assets/step_3.png" alt="step 3" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin-top: 20px;">
-    </section>
+         <!-- ============================== HERO (H-4 compact) ============================== -->
+         <section class="hero sec-first" style="border-top:none;padding:44px 0px 34px">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <div class="narrow" style="max-width:740px">
+                  <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">
+                     Odoo 19 &middot; Discuss &middot; Works on every model
+                  </p>
+                  <h1 class="pmch1" style="color:#270140;letter-spacing:-0.028em;margin:0px;font-family:inherit;font-size:42px;font-weight:800;line-height:1.1">
+                     The note that matters,
+                     <span class="pmcmark" style="color:#e85c52">pinned to the top of the chatter.</span>
+                  </h1>
+                  <p class="pmclead" style="margin:0px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                     The line that decides everything &mdash; a delivery
+                     instruction, an agreed exception, a customer on hold
+                     &mdash; sits sixty messages up.
+                     <b>Pin Message in Chatter</b> moves it to a
+                     <b>Pinned Messages</b> panel at the top of the chatter,
+                     with a count badge, on any Odoo record.
+                  </p>
+                  <div class="pmcbtnrow d-flex flex-wrap align-items-center" style="margin-top:24px;margin-bottom:-10px">
+                     <a class="pmcbtn pmcbtn-1 d-inline-flex align-items-center justify-content-center" href="#pmc-tour" style="color:rgb(255, 255, 255);font-weight:700;font-size:14.5px;text-decoration:none;padding:12px 22px;border-radius:10px;line-height:1.25;background-color:#fa7268;margin-right:10px;margin-bottom:10px">See it in six screens</a>
+                     <a class="pmcbtn pmcbtn-2 d-inline-flex align-items-center justify-content-center" href="mailto:odoo@doodex.net" style="color:#270140;font-weight:700;font-size:14.5px;text-decoration:none;padding:12px 22px;border-radius:10px;line-height:1.25;background-color:rgb(255, 255, 255);margin-bottom:10px">Ask a question</a>
+                  </div>
+               </div>
+               <div class="trust d-flex flex-wrap" style="margin-top:26px;margin-bottom:-9px">
+                  <span class="chip d-inline-flex align-items-center" style="font-size:12.5px;font-weight:600;color:#270140;padding:7px 13px;border-radius:9999px;background-color:#f4eef8;margin-right:9px;margin-bottom:9px"><img src="./assets/icons/ic-chip-77e7e0.png" width="14" height="14" alt="" loading="lazy" style="max-width:none;display:inline-block;width:14px;height:14px;vertical-align:middle;min-width:14px;margin-right:7px" class="flex-shrink-0">Built for Odoo 19.0</span>
+                  <span class="chip d-inline-flex align-items-center" style="font-size:12.5px;font-weight:600;color:#270140;padding:7px 13px;border-radius:9999px;background-color:#f4eef8;margin-right:9px;margin-bottom:9px"><img src="./assets/icons/ic-chip-89338c.png" width="14" height="14" alt="" loading="lazy" style="max-width:none;display:inline-block;width:14px;height:14px;vertical-align:middle;min-width:14px;margin-right:7px" class="flex-shrink-0">Any chatter, any model</span>
+                  <span class="chip d-inline-flex align-items-center" style="font-size:12.5px;font-weight:600;color:#270140;padding:7px 13px;border-radius:9999px;background-color:#f4eef8;margin-right:9px;margin-bottom:9px"><img src="./assets/icons/ic-chip-6d61f9.png" width="14" height="14" alt="" loading="lazy" style="max-width:none;display:inline-block;width:14px;height:14px;vertical-align:middle;min-width:14px;margin-right:7px" class="flex-shrink-0">Live update, no refresh</span>
+                  <span class="chip d-inline-flex align-items-center" style="font-size:12.5px;font-weight:600;color:#270140;padding:7px 13px;border-radius:9999px;background-color:#f4eef8;margin-right:9px;margin-bottom:9px"><img src="./assets/icons/ic-chip-a2329a.png" width="14" height="14" alt="" loading="lazy" style="max-width:none;display:inline-block;width:14px;height:14px;vertical-align:middle;min-width:14px;margin-right:7px" class="flex-shrink-0">3 automated tests, shipped inside</span>
+                  <span class="chip d-inline-flex align-items-center" style="font-size:12.5px;font-weight:600;color:#270140;padding:7px 13px;border-radius:9999px;background-color:#f4eef8;margin-right:9px;margin-bottom:9px"><img src="./assets/icons/ic-chip-116960.png" width="14" height="14" alt="" loading="lazy" style="max-width:none;display:inline-block;width:14px;height:14px;vertical-align:middle;min-width:14px;margin-right:7px" class="flex-shrink-0">No activation key</span>
+                  <span class="chip d-inline-flex align-items-center" style="font-size:12.5px;font-weight:600;color:#270140;padding:7px 13px;border-radius:9999px;background-color:#f4eef8;margin-bottom:9px"><img src="./assets/icons/ic-chip-1750a9.png" width="14" height="14" alt="" loading="lazy" style="max-width:none;display:inline-block;width:14px;height:14px;vertical-align:middle;min-width:14px;margin-right:7px" class="flex-shrink-0">Licence LGPL-3</span>
+               </div>
+               <figure style="margin:30px 0 0;border-radius:20px">
+                  <img src="./assets/gifs/hero-pin-note.gif" alt="A delivery instruction eleven messages down the chatter of a sale order being pinned, moving to the Pinned Messages panel at the top with a count badge, and the See button jumping back to the original message." style="max-width:100%;border-radius:20px">
+               </figure>
+            </div>
+         </section>
 
-    <section id="benefits" class="my-5">
-        <h2 style="font-weight: 700;">Benefits</h2>
-        <ul>
-            <li><strong>Highlight Important Information:</strong> Easily mark critical messages in the chatter so they remain visible and accessible at all times.</li>
-            <li><strong>Quick Access to Key Messages:</strong> View all pinned messages in one place without having to scroll through the entire message thread.</li>
-            <li><strong>Improved Collaboration:</strong> Helps team members quickly identify and reference important communications, reducing miscommunication.</li>
-        </ul>
-        
-    </section>
+         <!-- ============================== SHOWCASE (Archetype C signature) ==============================
+  NO SCRIPT OF OURS AND NO DEPENDENCE ON ANYONE ELSE'S. The step switcher is a
+  native <details>/<summary> group: the browser opens and closes it on its own.
+  It therefore works on the store page whether or not the host page runs
+  Bootstrap, and the description still adds nothing executable, which is what
+  the vendor guideline ("You cannot inject JavaScript") requires.
 
-    <section id="installation" class="my-5">
-        <h2 style="font-weight: 700;">Installation</h2>
-        <ol>
-            <li>Download the module from this repository.</li>
-            <li>Install the module in your Odoo instance.</li>
-        </ol>
-    </section>
+  The shared name="pmc-steps" makes the group exclusive natively &mdash; opening one
+  step closes the others. A browser that does not know that attribute simply
+  lets more than one step stay open, which is harmless. Step 1 carries `open`,
+  so a screenshot is on screen at first paint.
 
-    <section id="usage" class="my-5">
-        <h2 style="font-weight: 700;">Usage</h2>
-        <p>For how to use this module you can go to <a href="#how_to_use">here</a></p>
-    </section>
+  Do NOT reintroduce data-bs-toggle / data-toggle here: the store page's own
+  Bootstrap is not reliably present, and if it were, its class-based tab logic
+  would fight the browser's own open/close state.
+================================================================================ -->
+         <section class="sec" id="pmc-tour" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">See it work</p>
+               <h2 class="pmch2" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2">Six screens, start to finish</h2>
+               <p class="pmclead narrow" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                  Open a step below. This is the whole product &mdash; there is
+                  no configuration screen, no new menu and nothing to set up
+                  first.
+               </p>
 
-    <section id="compatibility" class="my-5">
-        <h2 style="font-weight: 700;">Compatibility</h2>
-        <p>Odoo version: 17.0</p>
-    </section>
+               <div class="scase" style="margin-top:30px;border:1px solid #ece4f3;border-radius:14px;background-color:rgb(255, 255, 255)">
+                  <details class="scstep" id="pmc-sc-0" name="pmc-steps" open="" style="border-top:0px">
+                     <summary class="scsum" style="display:block;padding:14px 18px;background-color:rgb(255, 255, 255)">
+                        <span class="scsum-in row g-0 align-items-center" style="">
+                           <span class="scn d-inline-flex align-items-center justify-content-center col-auto flex-shrink-0" style="width:32px;height:32px;border-radius:9999px;border:1px solid #ece4f3;font-size:12.5px;font-weight:800;color:rgb(255, 255, 255);border-color:#270140;background-color:#270140;min-width:32px;margin-right:14px">1</span>
+                           <span class="sct col" style="min-width:0px;margin-right:14px"><span class="stp" style="display:block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:2px">Step 1</span><b style="display:block;font-size:15px;font-weight:700;color:#270140;line-height:1.35">The note nobody can find</b></span>
+                           <img src="./assets/icons/ic-scchev-5a9e84.png" width="18" height="18" alt="" loading="lazy" style="max-width:none;width:18px;height:18px;color:#270140;display:inline-block;vertical-align:middle;min-width:18px" class="scchev col-auto flex-shrink-0">
+                        </span>
+                     </summary>
+                     <div class="scbody row g-0 align-items-start" style="padding:4px 18px 22px 64px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                        <div class="scshot col-12 col-md-7" style="border-radius:10px;background-color:#faf7fc;min-width:62.5%;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <img src="./assets/screenshots/sc-01-buried-note.png" alt="Two crops of the same sale order chatter: the top, where nothing mentions the delivery, and nine messages down, where the eleven-day-old delivery instruction sits outlined in coral." style="max-width:100%;display:block;width:100%;height:auto;border-radius:10px">
+                        </div>
+                        <p class="sccap col-12 col-md" style="margin:0px;font-size:13.5px;line-height:1.6;color:#525252;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <b style="color:#270140">The problem, on a real record.</b> Sixty messages
+                           of tracked-field changes, e-mails and notes.
+                           Somewhere in there is the one line that explains why
+                           this order is different. Everyone who opens this
+                           record has to be told again.
+                        </p>
+                     </div>
+                  </details>
+                  <details class="scstep" id="pmc-sc-1" name="pmc-steps" style="border-top:1px solid #ece4f3">
+                     <summary class="scsum" style="display:block;padding:14px 18px;background-color:#faf7fc">
+                        <span class="scsum-in row g-0 align-items-center" style="">
+                           <span class="scn d-inline-flex align-items-center justify-content-center col-auto flex-shrink-0" style="width:32px;height:32px;border-radius:9999px;border:1px solid #ece4f3;font-size:12.5px;font-weight:800;color:#e85c52;background-color:rgb(255, 255, 255);min-width:32px;margin-right:14px">2</span>
+                           <span class="sct col" style="min-width:0px;margin-right:14px"><span class="stp" style="display:block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:2px">Step 2</span><b style="display:block;font-size:15px;font-weight:700;color:#171717;line-height:1.35">One click on the pin</b></span>
+                           <img src="./assets/icons/ic-scchev-931aca.png" width="18" height="18" alt="" loading="lazy" style="max-width:none;width:18px;height:18px;color:#737373;display:inline-block;vertical-align:middle;min-width:18px" class="scchev col-auto flex-shrink-0">
+                        </span>
+                     </summary>
+                     <div class="scbody row g-0 align-items-start" style="padding:4px 18px 22px 64px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                        <div class="scshot col-12 col-md-7" style="border-radius:10px;background-color:#faf7fc;min-width:62.5%;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <img src="./assets/screenshots/sc-02-pin-click.png" alt="The Odoo chatter on sale order S00024 with the thumb-tack pin button ringed in the message's own hover bar, beside the author name." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto;border-radius:10px">
+                        </div>
+                        <p class="sccap col-12 col-md" style="margin:0px;font-size:13.5px;line-height:1.6;color:#525252;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <b style="color:#270140">A thumb-tack on the message itself.</b> It sits
+                           beside the author's name, so pinning is one click
+                           where you are already reading. There is also a
+                           <b style="color:#270140">Pin</b> entry in the message actions menu if you
+                           prefer that route.
+                        </p>
+                     </div>
+                  </details>
+                  <details class="scstep" id="pmc-sc-2" name="pmc-steps" style="border-top:1px solid #ece4f3">
+                     <summary class="scsum" style="display:block;padding:14px 18px;background-color:#faf7fc">
+                        <span class="scsum-in row g-0 align-items-center" style="">
+                           <span class="scn d-inline-flex align-items-center justify-content-center col-auto flex-shrink-0" style="width:32px;height:32px;border-radius:9999px;border:1px solid #ece4f3;font-size:12.5px;font-weight:800;color:#e85c52;background-color:rgb(255, 255, 255);min-width:32px;margin-right:14px">3</span>
+                           <span class="sct col" style="min-width:0px;margin-right:14px"><span class="stp" style="display:block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:2px">Step 3</span><b style="display:block;font-size:15px;font-weight:700;color:#171717;line-height:1.35">A panel with a count badge</b></span>
+                           <img src="./assets/icons/ic-scchev-931aca.png" width="18" height="18" alt="" loading="lazy" style="max-width:none;width:18px;height:18px;color:#737373;display:inline-block;vertical-align:middle;min-width:18px" class="scchev col-auto flex-shrink-0">
+                        </span>
+                     </summary>
+                     <div class="scbody row g-0 align-items-start" style="padding:4px 18px 22px 64px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                        <div class="scshot col-12 col-md-7" style="border-radius:10px;background-color:#faf7fc;min-width:62.5%;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <img src="./assets/screenshots/sc-03-panel-badge.png" alt="The collapsed Pinned Messages header sitting directly under the Odoo chatter topbar, its count badge showing one, ringed in coral." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto;border-radius:10px">
+                        </div>
+                        <p class="sccap col-12 col-md" style="margin:0px;font-size:13.5px;line-height:1.6;color:#525252;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <b style="color:#270140">A Pinned Messages header appears under the
+                              topbar.</b>
+                           Collapsed by default, with a badge showing how many
+                           there are, so you know the record has context waiting
+                           without losing any vertical space to it.
+                        </p>
+                     </div>
+                  </details>
+                  <details class="scstep" id="pmc-sc-3" name="pmc-steps" style="border-top:1px solid #ece4f3">
+                     <summary class="scsum" style="display:block;padding:14px 18px;background-color:#faf7fc">
+                        <span class="scsum-in row g-0 align-items-center" style="">
+                           <span class="scn d-inline-flex align-items-center justify-content-center col-auto flex-shrink-0" style="width:32px;height:32px;border-radius:9999px;border:1px solid #ece4f3;font-size:12.5px;font-weight:800;color:#e85c52;background-color:rgb(255, 255, 255);min-width:32px;margin-right:14px">4</span>
+                           <span class="sct col" style="min-width:0px;margin-right:14px"><span class="stp" style="display:block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:2px">Step 4</span><b style="display:block;font-size:15px;font-weight:700;color:#171717;line-height:1.35">Expand it, jump to it</b></span>
+                           <img src="./assets/icons/ic-scchev-931aca.png" width="18" height="18" alt="" loading="lazy" style="max-width:none;width:18px;height:18px;color:#737373;display:inline-block;vertical-align:middle;min-width:18px" class="scchev col-auto flex-shrink-0">
+                        </span>
+                     </summary>
+                     <div class="scbody row g-0 align-items-start" style="padding:4px 18px 22px 64px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                        <div class="scshot col-12 col-md-7" style="border-radius:10px;background-color:#faf7fc;min-width:62.5%;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <img src="./assets/screenshots/sc-04-panel-open.png" alt="The Pinned Messages panel expanded at the top of the Odoo chatter, showing the pinned delivery instruction with its author and date and the See button ringed in coral." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto;border-radius:10px">
+                        </div>
+                        <p class="sccap col-12 col-md" style="margin:0px;font-size:13.5px;line-height:1.6;color:#525252;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <b style="color:#270140">Expand it and the pinned notes are cards, newest
+                              first.</b>
+                           Each carries a <b style="color:#270140">See</b> button that jumps the
+                           chatter to the original message, in place, with its
+                           full history and attachments around it.
+                        </p>
+                     </div>
+                  </details>
+                  <details class="scstep" id="pmc-sc-4" name="pmc-steps" style="border-top:1px solid #ece4f3">
+                     <summary class="scsum" style="display:block;padding:14px 18px;background-color:#faf7fc">
+                        <span class="scsum-in row g-0 align-items-center" style="">
+                           <span class="scn d-inline-flex align-items-center justify-content-center col-auto flex-shrink-0" style="width:32px;height:32px;border-radius:9999px;border:1px solid #ece4f3;font-size:12.5px;font-weight:800;color:#e85c52;background-color:rgb(255, 255, 255);min-width:32px;margin-right:14px">5</span>
+                           <span class="sct col" style="min-width:0px;margin-right:14px"><span class="stp" style="display:block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:2px">Step 5</span><b style="display:block;font-size:15px;font-weight:700;color:#171717;line-height:1.35">The same on any record</b></span>
+                           <img src="./assets/icons/ic-scchev-931aca.png" width="18" height="18" alt="" loading="lazy" style="max-width:none;width:18px;height:18px;color:#737373;display:inline-block;vertical-align:middle;min-width:18px" class="scchev col-auto flex-shrink-0">
+                        </span>
+                     </summary>
+                     <div class="scbody row g-0 align-items-start" style="padding:4px 18px 22px 64px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                        <div class="scshot col-12 col-md-7" style="border-radius:10px;background-color:#faf7fc;min-width:62.5%;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <img src="./assets/screenshots/sc-05-any-record.png" alt="The Pinned Messages panel on Odoo sale order S00024, above a list of the other record types that carry a chatter: contacts, purchase orders, invoices, products, employees, projects and custom models." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto;border-radius:10px">
+                        </div>
+                        <p class="sccap col-12 col-md" style="margin:0px;font-size:13.5px;line-height:1.6;color:#525252;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <b style="color:#270140">It is not a Sales feature or a CRM feature.</b> It
+                           attaches to the chatter itself, so it is there on
+                           contacts, sale orders, purchase orders, invoices,
+                           tasks, products, employees &mdash; anything in Odoo
+                           with a chatter on it.
+                        </p>
+                     </div>
+                  </details>
+                  <details class="scstep" id="pmc-sc-5" name="pmc-steps" style="border-top:1px solid #ece4f3">
+                     <summary class="scsum" style="display:block;padding:14px 18px;background-color:#faf7fc">
+                        <span class="scsum-in row g-0 align-items-center" style="">
+                           <span class="scn d-inline-flex align-items-center justify-content-center col-auto flex-shrink-0" style="width:32px;height:32px;border-radius:9999px;border:1px solid #ece4f3;font-size:12.5px;font-weight:800;color:#e85c52;background-color:rgb(255, 255, 255);min-width:32px;margin-right:14px">6</span>
+                           <span class="sct col" style="min-width:0px;margin-right:14px"><span class="stp" style="display:block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:2px">Step 6</span><b style="display:block;font-size:15px;font-weight:700;color:#171717;line-height:1.35">Unpin when it stops mattering</b></span>
+                           <img src="./assets/icons/ic-scchev-931aca.png" width="18" height="18" alt="" loading="lazy" style="max-width:none;width:18px;height:18px;color:#737373;display:inline-block;vertical-align:middle;min-width:18px" class="scchev col-auto flex-shrink-0">
+                        </span>
+                     </summary>
+                     <div class="scbody row g-0 align-items-start" style="padding:4px 18px 22px 64px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                        <div class="scshot col-12 col-md-7" style="border-radius:10px;background-color:#faf7fc;min-width:62.5%;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <img src="./assets/screenshots/sc-06-unpin.png" alt="The same Odoo message before and after unpinning: the pin marker beside the author disappears, and the message stays in the same place with the same date." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto;border-radius:10px">
+                        </div>
+                        <p class="sccap col-12 col-md" style="margin:0px;font-size:13.5px;line-height:1.6;color:#525252;padding-left:11px;padding-right:11px;margin-bottom:22px">
+                           <b style="color:#270140">Unpinning is the same click again.</b> The message
+                           leaves the panel and stays exactly where it always
+                           was in the chatter. Nothing is deleted, moved or
+                           rewritten &mdash; a pin is a flag, not an edit.
+                        </p>
+                     </div>
+                  </details>
+               </div>
+            </div>
+         </section>
 
-    <section id="license" class="my-5">
-        <h2 style="font-weight: 700;">License</h2>
-        <p>This module is licensed under LGPLv3 licensed.</p>
-    </section>
+         <!-- ============================== FEATURES (F-1 icon rows) ============================== -->
+         <section class="sec" id="pmc-features" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">Features</p>
+               <h2 class="pmch2" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2">Everything it does, in one screen</h2>
+               <p class="pmclead narrow" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                  It is a small module and this is deliberately the whole list.
+                  Nothing is hidden behind a "premium" tier, because there is
+                  only one tier.
+               </p>
+               <div class="featgrid row g-0" style="margin-top:26px;margin-left:-23px;margin-right:-23px">
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-afd7bb.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">One-click pin, one-click unpin</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           A thumb-tack on the message bubble, filled when
+                           pinned and outlined when not. No dialog, no
+                           confirmation step.
+                        </p>
+                     </div>
+                  </div></div>
 
-    <div class="separator" style="border-top: 1px solid #ddd; margin: 40px 0;"></div>
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-b46837.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">A Pinned Messages panel at the top</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           Injected directly under the chatter topbar, above
+                           every other message, so it is the first thing anyone
+                           opening the record sees.
+                        </p>
+                     </div>
+                  </div></div>
 
-    <section id="about" class="my-5">
-        <h2 style="font-weight: 700;"></h2>
-        <p>Welcome to Doodex: Your Partner in Tailor-Made Odoo Solutions</p>
-        <p>At Doodex, we believe that every business is unique, with its own set of challenges and opportunities. That’s why we specialize in delivering customized Odoo solutions tailored to meet the specific needs of your organization. Our expertise in Python development and deep understanding of the Odoo platform enable us to provide unparalleled services that drive efficiency, enhance productivity, and support your business growth.</p>
-        <h3 style="font-weight: 700;">About Doodex</h3>
-        <p>Doodex is a leading provider of business management solutions built on the Odoo framework. With a focus on customization and flexibility, we offer a wide range of services designed to optimize your business processes. Our team of experienced developers and consultants work closely with you to understand your requirements and deliver solutions that are perfectly aligned with your business goals.</p>
-        <h3 style="font-weight: 700;">Our Services</h3>
-        <ul>
-            <li><strong>Odoo Customization:</strong> Our customization services ensure that the Odoo platform is tailored to fit your unique business needs. From modifying existing modules to developing new functionalities, we provide solutions that enhance the efficiency of your operations.</li>
-            <li><strong>Tailor-Made Solutions:</strong> At Doodex, we understand that one size does not fit all. Our tailor-made solutions are designed to address the specific challenges faced by your business. We offer bespoke development services that create a perfect match between Odoo’s capabilities and your business requirements.</li>
-            <li><strong>Python Development:</strong> Our team of skilled Python developers brings extensive experience in developing robust and scalable applications. Whether you need a custom module, a complex integration, or a standalone application, we leverage the power of Python to deliver high-quality solutions.</li>
-            <li><strong>Integration Services:</strong> We help you integrate Odoo with other systems and applications to ensure seamless data flow and unified operations. Our integration services cover a wide range of systems including CRM, ERP, eCommerce platforms, and more.</li>
-            <li><strong>Odoo Implementation:</strong> We offer end-to-end Odoo implementation services, guiding you through the entire process from initial consultation to final deployment. Our structured approach ensures a smooth transition and rapid adoption of the new system.</li>
-            <li><strong>Support and Maintenance:</strong> Our commitment to your success doesn’t end with implementation. We provide ongoing support and maintenance services to ensure that your Odoo system runs smoothly and efficiently, allowing you to focus on your core business activities.</li>
-        </ul>
-        <h3 style="font-weight: 700;">Why Choose Doodex?</h3>
-        <ul>
-            <li><strong>Expertise in Odoo:</strong> Our team has a deep understanding of the Odoo platform and its various modules, enabling us to deliver solutions that are both effective and efficient.</li>
-            <li><strong>Customized Solutions:</strong> We believe in providing solutions that are tailored to your specific needs, ensuring maximum ROI.</li>
-            <li><strong>Proven Track Record:</strong> We have successfully implemented Odoo solutions for a wide range of businesses across different industries.</li>
-            <li><strong>Commitment to Quality:</strong> Our focus on quality ensures that every solution we deliver meets the highest standards of excellence.</li>
-            <li><strong>Comprehensive Support:</strong> We offer continuous support and maintenance services to keep your system up-to-date and running smoothly.</li>
-        </ul>
-        <h3 style="font-weight: 700;">Get in Touch</h3>
-        <p>If you are looking for a partner who can provide customized Odoo solutions tailored to your business needs, look no further than Doodex. Visit our website at <a href="https://www.doodex.net/" style="color: #ebac55;">www.doodex.net</a> to learn more about our services and how we can help you achieve your business objectives.</p>
-        <p>Get a free audit <a href="https://www.doodex.net/en/audit-gratuit" style="color: #ebac55;">here</a>.</p>
-    </section>
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-c3dbc9.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Collapsed by default, with a count</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           A badge shows how many notes are pinned. You get the
+                           signal without giving up the screen space until you
+                           want it.
+                        </p>
+                     </div>
+                  </div></div>
 
-    <section id="contact" class="contact-section" style="background-color: #f4f4f4; padding: 40px 20px; text-align: center;">
-        <h2 style="font-weight: 700;">Contact Us</h2>
-        <p>If you have any questions or need further information, feel free to reach out to us.</p>
-        <a href="mailto:nisrinamirandaa@doodex.net" class="btn btn-primary" style="background-color: #ebac55; color: #fff; border: none; padding: 10px 20px; text-decoration: none;">Email Us</a>
-    </section>
-</div>
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-c47f38.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Updates live, without a refresh</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           Pinning broadcasts on Odoo's own message bus, so an
+                           open screen picks the change up on its own rather
+                           than waiting for someone to reload.
+                        </p>
+                     </div>
+                  </div></div>
 
-<footer style="background-color: #ebac55; color: #fff; text-align: center; padding: 20px;">
-    <div class="logos" style="margin-bottom: 10px;">
-        <img src="./assets/doodex_odoo.png" alt="Company Logo" style="max-height: 80px;">
-    </div>
-    <p style="margin: 0;">&copy; 2024 Doodex. All rights reserved.</p>
-</footer>
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-15dc76.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Works on every model with a chatter</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           Contacts, quotations, purchase orders, invoices,
+                           tasks, products, employees. Nothing to enable per
+                           model.
+                        </p>
+                     </div>
+                  </div></div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-1e9f3b.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">A See button that jumps to the message</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           From a pinned card straight to the original in the
+                           chatter, with its replies and attachments around it.
+                        </p>
+                     </div>
+                  </div></div>
 
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-03615c.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Newest pinned note first</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           The panel is ordered by date descending, so the most
+                           recent decision is the one at the top of the list.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-348713.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Follows you between records</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           Move from one record to another and the panel reloads
+                           for the new one instead of showing the previous
+                           record's pins.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-1845a9.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">No duplicate button next to Odoo's own</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           Discuss channel messages keep Odoo's native pin. This
+                           module's action appears only on chatter notes, so you
+                           never see two pins.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-99e52f.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Notes only, not system noise</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           The pin is offered on log notes, not on tracked-field
+                           changelogs, e-mail notifications or automatic system
+                           messages.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-87dda1.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Pinned cards are visually distinct</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           A soft tinted card background so the panel reads as
+                           pinned content rather than as more of the same
+                           conversation.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:23px;padding-right:23px"><div class="feat d-flex align-items-start" style="padding:17px 0px;border-top:1px solid #ece4f3;height:100%">
+                     <span class="fi d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:34px;height:34px;border-radius:10px;color:#270140;background-color:#f4eef8;min-width:34px;margin-right:14px"><img src="./assets/icons/ic-fi-aa8ccd.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span>
+                     <div>
+                        <h3 style="color:#171717;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15px;margin-bottom:4px">Nothing leaves your database</h3>
+                        <p style="margin:0px;font-size:13px;color:#737373;line-height:1.55">
+                           A boolean field and a bus notification. No external
+                           service, no activation key, no telemetry, nothing to
+                           renew.
+                        </p>
+                     </div>
+                  </div></div>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== IN MOTION ============================== -->
+         <section class="sec" id="pmc-detail" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">In motion</p>
+               <h2 class="pmch2" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2">
+                  Eight clips: pinned notes in a live Odoo chatter
+               </h2>
+               <p class="pmclead narrow" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                  A screenshot proves the panel exists. These prove it behaves
+                  &mdash; an instant toggle with no save step, one user pinning
+                  and another's window updating on Odoo's own bus, and identical
+                  behaviour on every record with a chatter.
+               </p>
+               <div class="gcards row g-0" style="margin-top:30px;margin-left:-11px;margin-right:-11px;margin-bottom:-22px">
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-01-toggle.gif" alt="A log note in the Odoo chatter: the thumb-tack appears on hover, one click pins it and adds a pin marker beside the author, and the same click unpins it." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 01</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">Pin, unpin, pin again</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           The button is a toggle and the panel follows it
+                           immediately. No save step, no reload, no intermediate
+                           state to wonder about.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-02-realtime.gif" alt="The Odoo chatter before and after pinning: no panel, then the Pinned Messages panel with its count badge, with no page reload in between." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 02</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">
+                           Pinned, and on screen at once &mdash; no save, no
+                           reload
+                        </h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           The panel and its count appear the instant the pin is
+                           clicked. The change goes out on Odoo's own bus rather
+                           than being polled for, so a colleague already on the
+                           record sees it too.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-03-badge.gif" alt="The collapsed Pinned Messages header in the Odoo chatter with its count badge, then expanded to show the pinned note with its author and date." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 03</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">The badge, then the detail</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           Collapsed it costs one line of height and tells you
+                           there are three things to know. Open it when you want
+                           them.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-04-jump.gif" alt="The See button on a pinned card in the Odoo chatter, and the original message it lands on further down the same thread." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 04</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">From the card to the conversation</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           <b>See</b> takes you to the message where it actually
+                           lives, so you get the thread around it instead of a
+                           decontextualised excerpt.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-05-any-model.gif" alt="The same Pinned Messages panel on two different Odoo models: sale order S00024 and the contact Tennis Club." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 05</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">Contact, order, task &mdash; same behaviour</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           It is attached to the chatter component, not to a
+                           business app, which is why it turns up everywhere
+                           without being configured anywhere.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-06-switch-record.gif" alt="The pinned panel on sale order S00024, then on the contact Tennis Club showing that record's own pinned note instead." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 06</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">No leftovers from the last record</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           Switching records reloads the panel for the record
+                           you are now on. Obvious when it works, maddening when
+                           it does not.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-07-no-duplicate.gif" alt="A message in the Odoo Discuss channel #general with only Odoo's own actions and no thumb-tack, and a record chatter message where this module's thumb-tack appears." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 07</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">One pin button, never two</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           Odoo 19 already pins messages inside Discuss
+                           channels. That is left alone; this module fills the
+                           gap on record chatters, and the two never appear
+                           together.
+                        </p>
+                     </div>
+                  </div></div>
+
+                  <div class="col-12 col-md-6" style="padding-left:11px;padding-right:11px;margin-bottom:22px"><div class="gcard" style="border-radius:14px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="shot" style="border-bottom:1px solid #ece4f3;background-color:#faf7fc">
+                        <img src="./assets/gifs/feat-08-notes-only.gif" alt="The pin marker on an Odoo log note, and the system messages below it &mdash; &ldquo;Invoice paid&rdquo; and &ldquo;Sales Order created&rdquo; &mdash; which are offered no pin at all." loading="lazy" style="max-width:100%;display:block;width:100%;height:auto">
+                     </div>
+                     <div class="body" style="padding:17px 19px 21px">
+                        <span class="n" style="display:inline-block;font-size:10px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;margin-bottom:5px">In motion 08</span>
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:16px;margin-bottom:5px">Only where pinning makes sense</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                           No pin on "Stage: New &rarr; Qualified" or on an
+                           outgoing e-mail receipt. Pinning system noise would
+                           just make a second stream of noise.
+                        </p>
+                     </div>
+                  </div></div>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== PROOF ============================== -->
+         <section class="sec-tight" style="padding:30px 0px">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <div class="statrow row g-0" style="text-align:center;border:1px solid #ece4f3;border-radius:14px;background-color:rgb(255, 255, 255)">
+                  <div class="st col-6 col-md-3" style="padding:22px 14px;border-left-style:none;border-left-width:0">
+                     <p class="n" style="margin:0px;font-size:31px;font-weight:800;color:#270140;letter-spacing:-0.03em;line-height:1.1">3</p>
+                     <p class="l" style="margin:0px;font-size:12.5px;color:#737373;margin-top:4px">automated tests, 0 failures</p>
+                  </div>
+                  <div class="st col-6 col-md-3" style="padding:22px 14px;border-left-width:1px;border-left-style:solid;border-left-color:#ece4f3">
+                     <p class="n" style="margin:0px;font-size:31px;font-weight:800;color:#270140;letter-spacing:-0.03em;line-height:1.1">3</p>
+                     <p class="l" style="margin:0px;font-size:12.5px;color:#737373;margin-top:4px">standard Odoo dependencies</p>
+                  </div>
+                  <div class="st col-6 col-md-3" style="padding:22px 14px;border-left-width:1px;border-left-style:solid;border-left-color:#ece4f3">
+                     <p class="n" style="margin:0px;font-size:31px;font-weight:800;color:#270140;letter-spacing:-0.03em;line-height:1.1">1</p>
+                     <p class="l" style="margin:0px;font-size:12.5px;color:#737373;margin-top:4px">field added to your database</p>
+                  </div>
+                  <div class="st col-6 col-md-3" style="padding:22px 14px;border-left-width:1px;border-left-style:solid;border-left-color:#ece4f3">
+                     <p class="n" style="margin:0px;font-size:31px;font-weight:800;color:#270140;letter-spacing:-0.03em;line-height:1.1">0</p>
+                     <p class="l" style="margin:0px;font-size:12.5px;color:#737373;margin-top:4px">external services contacted</p>
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== QR CTA &middot; MID ============================== -->
+         <section class="sec-tight" style="padding:30px 0px">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <div class="qrcta" style="border-radius:20px;padding:32px 34px 26px;background-color:#270140">
+                  <div>
+                     <p class="qr-eyebrow" style="margin:0px 0px 8px;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#fa7268">
+                        The module is small, your time isn't
+                     </p>
+                     <h2 style="color:rgb(255, 255, 255);letter-spacing:-0.02em;margin:0px 0px 9px;font-family:inherit;font-size:26px;font-weight:800">Ask us anything before you install it</h2>
+                     <p class="qr-sub" style="margin:0px;color:rgba(255, 255, 255, 0.76);font-size:14.5px;line-height:1.58;max-width:680px">
+                        Whether it works on your custom model, whether pinning
+                        can be restricted, whether it survives your next
+                        upgrade, whether it clashes with another chatter module
+                        you already run &mdash; ask, and we will answer without
+                        pretending the answer is always yes.
+                     </p>
+                  </div>
+                  <div class="qr-grid row g-0" style="margin-top:24px;margin-left:-7px;margin-right:-7px;margin-bottom:-14px">
+                     <div class="col-12 col-md-4" style="min-width:0px;padding-left:7px;padding-right:7px;margin-bottom:14px"><div class="qr-card qr-lead d-flex flex-column" style="border-radius:14px;padding:17px;background-color:rgb(255, 255, 255);height:100%">
+                        <div class="qr-top d-flex align-items-center justify-content-between" style="margin-bottom:10px">
+                           <span class="qr-ico d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;border-radius:9px;background-color:#270140;min-width:32px;margin-right:10px"><img src="./assets/icons/ic-qr-ico-125f22.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span><span class="qr-tag qr-tag-hot" style="font-size:9.5px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:rgb(255, 255, 255);padding:4px 9px;border-radius:9999px;background-color:#fa7268">30 minutes</span>
+                        </div>
+                        <h3 class="qr-h" style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;margin-bottom:10px">Book a demo</h3>
+                        <p class="qr-p" style="margin:0px;font-size:12.5px;line-height:1.5;color:#737373;margin-bottom:10px">
+                           We show it on a live Odoo database, on your kind of record.
+                        </p>
+                        <span class="qr-code" aria-label="QR code for the Doodex booking page" style="display:block;border-radius:10px;padding:10px;margin-top:auto;background-color:#faf7fc;margin-bottom:10px"><img src="./assets/icons/qr-meeting.png" alt="QR code encoding hub.doodex.net/r/meeting" width="98" height="98" style="max-width:100%;display:block;width:98px;height:auto;margin:0px auto"></span>
+                        <a class="pmcbtn pmcbtn-1 qr-btn d-inline-flex align-items-center justify-content-center" style="color:rgb(255, 255, 255);font-weight:700;font-size:12px;text-decoration:none;padding:10px;border-radius:10px;line-height:1.25;width:100%;text-align:center;background-color:#fa7268">hub.doodex.net<wbr style="margin-right:8px">/r/meeting</a>
+                     </div></div>
+                     <div class="col-12 col-md-4" style="min-width:0px;padding-left:7px;padding-right:7px;margin-bottom:14px"><div class="qr-card d-flex flex-column" style="border-radius:14px;padding:17px;background-color:rgb(255, 255, 255);height:100%">
+                        <div class="qr-top d-flex align-items-center justify-content-between" style="margin-bottom:10px">
+                           <span class="qr-ico d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;border-radius:9px;background-color:#270140;min-width:32px;margin-right:10px"><img src="./assets/icons/ic-qr-ico-66f832.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span><span class="qr-tag" style="font-size:9.5px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#270140;padding:4px 9px;border-radius:9999px;background-color:#f4eef8">Written reply</span>
+                        </div>
+                        <h3 class="qr-h" style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;margin-bottom:10px">Send a question</h3>
+                        <p class="qr-p" style="margin:0px;font-size:12.5px;line-height:1.5;color:#737373;margin-bottom:10px">
+                           Put it in writing and we answer by e-mail.
+                        </p>
+                        <a class="qr-code" href="mailto:odoo@doodex.net" aria-label="QR code for the Doodex contact page" style="color:#e85c52;display:block;border-radius:10px;padding:10px;margin-top:auto;background-color:#faf7fc;margin-bottom:10px"><img src="./assets/icons/qr-contact.png" alt="QR code encoding doodex.net/contactus" width="98" height="98" style="max-width:100%;display:block;width:98px;height:auto;margin:0px auto"></a>
+                        <a class="pmcbtn pmcbtn-2 qr-btn d-inline-flex align-items-center justify-content-center" href="mailto:odoo@doodex.net" style="color:#270140;font-weight:700;font-size:12px;text-decoration:none;padding:10px;border-radius:10px;line-height:1.25;width:100%;text-align:center;background-color:rgb(255, 255, 255)">odoo@doodex.net</a>
+                     </div></div>
+                     <div class="col-12 col-md-4" style="min-width:0px;padding-left:7px;padding-right:7px;margin-bottom:14px"><div class="qr-card d-flex flex-column" style="border-radius:14px;padding:17px;background-color:rgb(255, 255, 255);height:100%">
+                        <div class="qr-top d-flex align-items-center justify-content-between" style="margin-bottom:10px">
+                           <span class="qr-ico d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;border-radius:9px;background-color:#270140;min-width:32px;margin-right:10px"><img src="./assets/icons/ic-qr-ico-dacd0d.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span><span class="qr-tag" style="font-size:9.5px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#270140;padding:4px 9px;border-radius:9999px;background-color:#f4eef8">Fastest reply</span>
+                        </div>
+                        <h3 class="qr-h" style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;margin-bottom:10px">Message us</h3>
+                        <p class="qr-p" style="margin:0px;font-size:12.5px;line-height:1.5;color:#737373;margin-bottom:10px">Reach the team directly on WhatsApp.</p>
+                        <span class="qr-code" aria-label="QR code for the Doodex WhatsApp line" style="display:block;border-radius:10px;padding:10px;margin-top:auto;background-color:#faf7fc;margin-bottom:10px"><img src="./assets/icons/qr-whatsapp.png" alt="QR code encoding hub.doodex.net/r/whatsapp" width="98" height="98" style="max-width:100%;display:block;width:98px;height:auto;margin:0px auto"></span>
+                        <a class="pmcbtn pmcbtn-2 qr-btn d-inline-flex align-items-center justify-content-center" style="color:#270140;font-weight:700;font-size:12px;text-decoration:none;padding:10px;border-radius:10px;line-height:1.25;width:100%;text-align:center;background-color:rgb(255, 255, 255)">hub.doodex.net<wbr style="margin-right:8px">/r/whatsapp</a>
+                     </div></div>
+                  </div>
+                  <p class="qr-foot" style="margin:18px 0px 0px;color:rgba(255, 255, 255, 0.5);font-size:12px">
+                     Scan a code with your phone camera to open the link. The
+                     address printed beside each code is the same destination
+                     typed out, so it still works if this page is copied as
+                     plain text.
+                  </p>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== REQUIREMENTS ==============================
+  Six beginner questions as icon cards (PNG tiles in ./assets/icons/req-*.png,
+  rendered at 46px from 112px sources), then the remaining detail as the table.
+  Icons are img tags, not an icon font: the store page has no icon webfont.
+================================================================================ -->
+         <section class="sec" id="pmc-requirements" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">Requirements</p>
+               <h2 class="pmch2" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2">
+                  Runs on a standard Odoo 19. Nothing else to buy.
+               </h2>
+               <p class="pmclead narrow" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                  Never installed an Odoo app before? This is the whole
+                  checklist in plain words &mdash; what you need, what it
+                  touches in your database, and how to undo it. There is no
+                  licence key, no external service and no configuration screen
+                  anywhere in it.
+               </p>
+
+               <div class="reqgrid row g-0" style="margin-top:30px;margin-left:-9px;margin-right:-9px;margin-bottom:-18px">
+                  <div class="col-12 col-md-4" style="padding-left:9px;padding-right:9px;margin-bottom:18px"><div class="reqcard" style="border:1px solid #ece4f3;border-radius:14px;padding:20px 20px 22px;background-color:rgb(255, 255, 255);height:100%">
+                     <img src="./assets/icons/req-odoo-version.png" alt="A violet badge with a coral tick." loading="lazy" width="46" height="46" style="max-width:100%;width:46px;height:46px;display:block;margin:0px 0px 14px">
+                     <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;line-height:1.35;margin-bottom:6px">Which Odoo do I need?</h3>
+                     <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                        Odoo <b>19.0</b>, Community or Enterprise. This is the 19.0 build. Nothing else on the
+                        server changes.
+                     </p>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:9px;padding-right:9px;margin-bottom:18px"><div class="reqcard" style="border:1px solid #ece4f3;border-radius:14px;padding:20px 20px 22px;background-color:rgb(255, 255, 255);height:100%">
+                     <img src="./assets/icons/req-depends.png" alt="Three stacked layers standing for standard Odoo modules." loading="lazy" width="46" height="46" style="max-width:100%;width:46px;height:46px;display:block;margin:0px 0px 14px">
+                     <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;line-height:1.35;margin-bottom:6px">Do I need other apps first?</h3>
+                     <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                        No. It uses only standard Odoo:
+                        <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">web</span>,
+                        <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">base</span> and
+                        <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">mail</span> &mdash; all already in
+                        your database. Nothing extra to buy or subscribe to.
+                     </p>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:9px;padding-right:9px;margin-bottom:18px"><div class="reqcard" style="border:1px solid #ece4f3;border-radius:14px;padding:20px 20px 22px;background-color:rgb(255, 255, 255);height:100%">
+                     <img src="./assets/icons/req-install.png" alt="A download arrow dropping into a tray." loading="lazy" width="46" height="46" style="max-width:100%;width:46px;height:46px;display:block;margin:0px 0px 14px">
+                     <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;line-height:1.35;margin-bottom:6px">How do I install it?</h3>
+                     <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                        Three steps: copy the folder into your addons path,
+                        update the apps list, click <b>Install</b>. No
+                        installer, no shell script, no settings screen
+                        afterwards.
+                     </p>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:9px;padding-right:9px;margin-bottom:18px"><div class="reqcard" style="border:1px solid #ece4f3;border-radius:14px;padding:20px 20px 22px;background-color:rgb(255, 255, 255);height:100%">
+                     <img src="./assets/icons/req-no-key.png" alt="A key crossed out in coral." loading="lazy" width="46" height="46" style="max-width:100%;width:46px;height:46px;display:block;margin:0px 0px 14px">
+                     <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;line-height:1.35;margin-bottom:6px">Is there a licence key?</h3>
+                     <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                        None. The module never contacts a licence server and
+                        never phones home, so there is nothing to activate,
+                        renew or lose. It keeps working if you never hear from
+                        us again.
+                     </p>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:9px;padding-right:9px;margin-bottom:18px"><div class="reqcard" style="border:1px solid #ece4f3;border-radius:14px;padding:20px 20px 22px;background-color:rgb(255, 255, 255);height:100%">
+                     <img src="./assets/icons/req-database.png" alt="A database cylinder with a coral band." loading="lazy" width="46" height="46" style="max-width:100%;width:46px;height:46px;display:block;margin:0px 0px 14px">
+                     <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;line-height:1.35;margin-bottom:6px">What does it add to my database?</h3>
+                     <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                        One indexed true/false field,
+                        <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">is_pinned</span>, on
+                        <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">mail.message</span>. Your messages are
+                        never rewritten, moved or copied anywhere.
+                     </p>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:9px;padding-right:9px;margin-bottom:18px"><div class="reqcard" style="border:1px solid #ece4f3;border-radius:14px;padding:20px 20px 22px;background-color:rgb(255, 255, 255);height:100%">
+                     <img src="./assets/icons/req-uninstall.png" alt="A clock with a coral undo arrow." loading="lazy" width="46" height="46" style="max-width:100%;width:46px;height:46px;display:block;margin:0px 0px 14px">
+                     <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;line-height:1.35;margin-bottom:6px">Can I undo it?</h3>
+                     <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.58">
+                        Yes, in one click. Uninstalling removes the field, the
+                        panel and the buttons, and the chatter goes back to
+                        exactly what it was. Nothing is left behind.
+                     </p>
+                  </div></div>
+               </div>
+
+               <p class="reqsub" style="margin:0px;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#737373;margin-top:44px">The rest of the detail</p>
+               <div class="tw table-responsive">
+                  <table class="pmct" style="width:100%;border-collapse:collapse;font-size:13.5px;margin-top:22px">
+                     <thead>
+                        <tr>
+                           <th style="color:rgb(255, 255, 255);text-align:left;padding:12px 15px;font-weight:700;font-size:12.5px;border-top-left-radius:10px;width:26%;background-color:#270140">Item</th>
+                           <th style="color:rgb(255, 255, 255);text-align:left;padding:12px 15px;font-weight:700;font-size:12.5px;border-top-right-radius:10px;background-color:#270140">Detail</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">Licence</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              LGPL-3, with the full readable source. You may
+                              read it, audit it and change it for your own use.
+                           </td>
+                        </tr>
+                        <tr style="background-color:#faf7fc">
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">Where it appears</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              The chatter on any model &mdash; contacts, sale
+                              orders, invoices, tasks, products, your own custom
+                              models. Discuss channel messages keep Odoo's own
+                              native pin instead, so you never see two pin
+                              buttons.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">Which messages</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              Log notes and ordinary comments. The pin is not
+                              offered on system notifications, e-mail
+                              notifications or tracked-field entries such as
+                              "Stage: New &rarr; Qualified".
+                           </td>
+                        </tr>
+                        <tr style="background-color:#faf7fc">
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">Who can pin</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              Any user who can write to messages, on any record
+                              they can already see. There is no group, setting
+                              or author check today, so treat a pin as a shared
+                              bookmark. Need it restricted to managers?
+                              <a href="mailto:odoo@doodex.net" style="color:#e85c52">Ask us</a> before
+                              you buy and we will quote it.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">Languages</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              The labels are English only. No translation files
+                              ship today; Odoo's own translation tools let you
+                              add your language, or ask us and we will add it.
+                           </td>
+                        </tr>
+                        <tr style="background-color:#faf7fc">
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">External services</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              None. No data leaves your database, so there is
+                              nothing to disclose to your IT team and nothing to
+                              opt into.
+                           </td>
+                        </tr>
+                        <tr>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252"><b style="color:#270140">Demo data</b></td>
+                           <td style="padding:12px 15px;border-bottom:1px solid #ece4f3;vertical-align:top;color:#525252">
+                              None, and none needed. Open any record with a
+                              chatter, pin a note, and you have seen the whole
+                              product.
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== FAQ ============================== -->
+         <section class="sec" id="pmc-faq" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">FAQ</p>
+               <h2 class="pmch2" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2">Twelve real questions, answered plainly</h2>
+               <p class="pmclead narrow" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                  Open any question. These are what buyers ask us before paying:
+                  which records work, who can pin, what happens if you
+                  uninstall, and where Odoo's own Discuss pin still applies.
+               </p>
+               <div class="faq" style="margin-top:24px;border-top:1px solid #ece4f3">
+                  <details class="qa" open="" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Which records can I pin messages on?</h3>
+                        <img src="./assets/icons/ic-qsign-a203d5.png" width="28" height="28" alt="" loading="lazy" style="max-width:none;width:28px;height:28px;margin-top:-3px;color:#270140;display:inline-block;vertical-align:middle;margin-bottom:-4px;margin-left:-4px;margin-right:-4px" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px;display:block">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Any record with a chatter. The module patches the
+                           chatter component itself rather than a particular
+                           app, so contacts, quotations, sale orders, purchase
+                           orders, invoices, project tasks, products, employees
+                           and your own custom models all work with nothing to
+                           configure.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">
+                           Does this replace or break Odoo's own message
+                           pinning?
+                        </h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Neither. Odoo 19 pins messages inside Discuss
+                           channels, and that is untouched. This module adds the
+                           equivalent for record chatters, and its button is
+                           deliberately hidden on discussion messages so you
+                           never see two pins next to each other.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Can I pin any message, or only notes?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Log notes and ordinary comments. The pin is not
+                           offered on system notifications, e-mail
+                           notifications, automatic comments or tracked-field
+                           changelog entries such as "Stage: New &rarr;
+                           Qualified" &mdash; pinning those would create a
+                           second stream of noise rather than reduce the first.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Who can pin and unpin?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Any user who can write to messages, which in practice
+                           means most internal users, on any record they are
+                           allowed to see. There is no group, no setting and no
+                           restriction to the message's author today &mdash; a
+                           pin behaves as a shared bookmark, which for most
+                           teams is the point. If you need pinning restricted to
+                           managers,
+                           <a href="mailto:odoo@doodex.net" style="color:#e85c52">tell us</a> before
+                           you buy and we will quote it rather than have you
+                           find the gap afterwards.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Does pinning change or move the message?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           No. A pin sets one boolean on the existing message.
+                           The message stays where it was in the chatter, with
+                           its original author, date, body and attachments.
+                           Unpinning clears the flag and nothing else.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Will my colleague see it without refreshing?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Yes. Pinning sends a notification on Odoo's own
+                           message bus, so a screen already open on that record
+                           updates by itself. No polling, no reload prompt.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">How many messages can I pin on one record?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           There is no limit in the module. The panel lists
+                           every pinned message on the record, newest first, and
+                           shows the count on its collapsed header. Practically
+                           speaking three or four is where a pinned panel stops
+                           being useful, but nothing stops you.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Is it translated into my language?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Not yet &mdash; the labels are English only, and we
+                           would rather say so here than have you find out after
+                           paying. Odoo's own translation tools let you
+                           translate it in your own database, and if you ask us
+                           for a language we will add it to the module.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Is it Community or Enterprise?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Both. It depends only on
+                           <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">web</span>,
+                           <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">base</span> and
+                           <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">mail</span>, which ship in
+                           Community, and it works the same on Enterprise.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">Does anything leave my server?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           Nothing. There is no outbound network call of any
+                           kind &mdash; no telemetry, no licence check, no cloud
+                           component. That is also why there is no activation
+                           key and nothing for us to switch off.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">What happens if I uninstall it?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           The <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">is_pinned</span> field, the
+                           panel and the buttons are removed and the chatter
+                           returns to standard Odoo. Because pinning never
+                           edited a message, every message survives exactly as
+                           it was &mdash; you only lose the record of which ones
+                           were pinned.
+                        </p>
+                     </div>
+                  </details>
+
+                  <details class="qa" style="border-bottom:1px solid #ece4f3">
+                     <summary class="qsum d-flex align-items-start justify-content-between" style="padding:17px 2px">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1.4;margin-right:18px">What exactly do I get?</h3>
+                        <img src="./assets/icons/ic-qsign-566104.png" width="20" height="20" alt="" loading="lazy" style="max-width:none;width:20px;height:20px;margin-top:1px;color:#e85c52;display:inline-block;vertical-align:middle" class="qsign">
+                     </summary>
+                     <div class="qans" style="padding:0px 46px 20px 2px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.62;color:#525252">
+                           The module, its full LGPL-3 source, and a defect fix
+                           if you find a bug in it. Support and pre-sales go to
+                           the same inbox and a person who knows this code
+                           answers. Work beyond the module &mdash; restricting
+                           who may pin, adding a language, migrating to a newer
+                           Odoo &mdash; is quoted separately, and only if you
+                           ask.
+                        </p>
+                     </div>
+                  </details>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== CROSS-SELL ==============================
+  Reference layout: tinted band, centred header, three product cards, the suite
+  card inverted. Icons are the supplied product logos, normalised by
+  make_xsell_icons.py to 128px transparent PNGs shown at 34px.
+  LINK POLICY &mdash; these three buttons are the ONE place on the page that carries
+  an http href, and they point at apps.odoo.com itself: the store linking to
+  another page of the same store, not off it. Everything else on this page
+  still obeys the naked-link rule (mailto: and in-page #anchors only). If a
+  review ever invalidates these, drop the href and restore the "Find it on the
+  Apps Store" label &mdash; the naked search line below the grid is kept precisely so
+  the section still works without them.
+================================================================================ -->
+         <section class="sec xsec" id="pmc-works" style="padding:58px 0px;border-top:1px solid #ece4f3;background-color:#faf7fc">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow tac" style="margin:0px 0px 13px;display:block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52;text-align:center">Works great with</p>
+               <h2 class="pmch2 tac" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2;text-align:center">
+                  Other Doodex modules, built the same way
+               </h2>
+               <p class="pmclead narrow tac" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px;text-align:center;margin-left:auto;margin-right:auto">
+                  Different problems, same approach: narrow scope, a one-time
+                  price and the limits stated up front. Each one installs on its
+                  own.
+               </p>
+
+               <div class="xchips d-flex flex-wrap justify-content-center" style="margin-top:24px;margin-bottom:-10px">
+                  <span class="xchip" style="font-size:13px;font-weight:700;color:#270140;border:1px solid #ece4f3;border-radius:9999px;padding:9px 18px;background-color:rgb(255, 255, 255);margin-right:10px;margin-bottom:10px">Narrow scope</span>
+                  <span class="xchip" style="font-size:13px;font-weight:700;color:#270140;border:1px solid #ece4f3;border-radius:9999px;padding:9px 18px;background-color:rgb(255, 255, 255);margin-right:10px;margin-bottom:10px">One-time price</span>
+                  <span class="xchip" style="font-size:13px;font-weight:700;color:#270140;border:1px solid #ece4f3;border-radius:9999px;padding:9px 18px;background-color:rgb(255, 255, 255);margin-bottom:10px">Limits stated up front</span>
+               </div>
+
+               <div class="xsell row g-0" style="margin-top:30px;margin-left:-10px;margin-right:-10px;margin-bottom:-20px">
+                  <div class="col-12 col-md-4" style="padding-left:10px;padding-right:10px;margin-bottom:20px"><div class="xs xs-dark d-flex flex-column" style="border:1px solid #ece4f3;border-radius:14px;padding:22px 22px 24px;border-color:#270140;background-color:#270140;height:100%">
+                     <div class="xtop d-flex align-items-start justify-content-between">
+                        <img class="xico flex-shrink-0" src="./assets/icons/xs-growth-suite.png" width="34" height="34" alt="The Doodex Growth Suite mark: a white and coral triangle on a violet tile." loading="lazy" style="max-width:100%;display:block;width:34px;height:34px;min-width:34px;margin-right:12px">
+                        <span class="pr" style="font-size:10.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:rgb(255, 255, 255);padding:6px 11px;border-radius:9999px;white-space:nowrap;background-color:rgba(255, 255, 255, 0.13)">$349 once</span>
+                     </div>
+                     <div class="xbody flex-grow-1">
+                        <h3 style="color:rgb(255, 255, 255);letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:17px;margin-top:18px">Doodex Growth Suite</h3>
+                        <p style="margin:0px;font-size:13.5px;color:rgba(255, 255, 255, 0.72);line-height:1.6;margin-top:9px">
+                           Five CRM and marketing modules that share one
+                           another's data: BizScan AI, Campaign Manager, Smart
+                           Dashboards, User Roles and Email Sync+. Sold as one
+                           suite.
+                        </p>
+                     </div>
+                     <a class="xbtn" href="/apps/modules/19.0/marketing_crm_automation_dashboard_campaign_doodex" style="color:rgb(43, 7, 51);display:block;margin-top:22px;text-align:center;font-size:13.5px;font-weight:700;border:1.5px solid #270140;border-radius:10px;padding:11px 14px;text-decoration:none;border-color:#fa7268;background-color:#fa7268">Open on the Apps Store &rarr;</a>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:10px;padding-right:10px;margin-bottom:20px"><div class="xs d-flex flex-column" style="border:1px solid #ece4f3;border-radius:14px;padding:22px 22px 24px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="xtop d-flex align-items-start justify-content-between">
+                        <img class="xico flex-shrink-0" src="./assets/icons/xs-flow-reader.png" width="34" height="34" alt="The Flow Survey Reader mark: a coral and violet flow diagram." loading="lazy" style="max-width:100%;display:block;width:34px;height:34px;min-width:34px;margin-right:12px">
+                        <span class="pr" style="font-size:10.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#270140;padding:6px 11px;border-radius:9999px;white-space:nowrap;background-color:#f4eef8">Free</span>
+                     </div>
+                     <div class="xbody flex-grow-1">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:17px;margin-top:18px">Flow Survey Reader</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.6;margin-top:9px">
+                           Publish conditional surveys and forms straight from
+                           Odoo and keep every answer in your own database.
+                        </p>
+                     </div>
+                     <a class="xbtn" href="/apps/modules/19.0/flow_survey_reader" style="color:#270140;display:block;margin-top:22px;text-align:center;font-size:13.5px;font-weight:700;border:1.5px solid #270140;border-radius:10px;padding:11px 14px;text-decoration:none;background-color:rgb(255, 255, 255)">Open on the Apps Store &rarr;</a>
+                  </div></div>
+
+                  <div class="col-12 col-md-4" style="padding-left:10px;padding-right:10px;margin-bottom:20px"><div class="xs d-flex flex-column" style="border:1px solid #ece4f3;border-radius:14px;padding:22px 22px 24px;background-color:rgb(255, 255, 255);height:100%">
+                     <div class="xtop d-flex align-items-start justify-content-between">
+                        <img class="xico flex-shrink-0" src="./assets/icons/xs-flow-builder.png" width="34" height="34" alt="The Flow Survey Builder mark: an amber and purple flow diagram." loading="lazy" style="max-width:100%;display:block;width:34px;height:34px;min-width:34px;margin-right:12px">
+                        <span class="pr" style="font-size:10.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#270140;padding:6px 11px;border-radius:9999px;white-space:nowrap;background-color:#f4eef8">$199 once</span>
+                     </div>
+                     <div class="xbody flex-grow-1">
+                        <h3 style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:17px;margin-top:18px">Flow Survey Builder</h3>
+                        <p style="margin:0px;font-size:13.5px;color:#525252;line-height:1.6;margin-top:9px">
+                           The drag-and-drop editor for those surveys: 25
+                           question types, slide branching and full theming.
+                        </p>
+                     </div>
+                     <a class="xbtn" href="/apps/modules/19.0/flow_survey" style="color:#270140;display:block;margin-top:22px;text-align:center;font-size:13.5px;font-weight:700;border:1.5px solid #270140;border-radius:10px;padding:11px 14px;text-decoration:none;background-color:rgb(255, 255, 255)">Open on the Apps Store &rarr;</a>
+                  </div></div>
+               </div>
+               <p class="xnote tac" style="margin:0px;text-align:center;font-size:12.5px;color:#737373;margin-top:20px">
+                  On the Odoo Apps Store, search <b style="color:#270140">Doodex Growth Suite</b>,
+                  <b style="color:#270140">Flow Survey Reader</b> or
+                  <b style="color:#270140">Flow Survey Builder</b> &mdash; all published by Doodex.
+               </p>
+            </div>
+         </section>
+
+         <!-- ============================== RELEASES ============================== -->
+         <section class="sec" id="pmc-releases" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <p class="eyebrow" style="margin:0px 0px 13px;display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#e85c52">Releases</p>
+               <h2 class="pmch2" style="color:#270140;letter-spacing:-0.02em;margin:0px;font-family:inherit;font-size:28px;font-weight:800;line-height:1.2">What has shipped, and what is next</h2>
+               <p class="pmclead narrow" style="margin:0px;max-width:740px;font-size:17.5px;line-height:1.6;color:#525252;margin-top:15px">
+                  A visible changelog is the honest answer to "will this still
+                  be maintained next year". Ours starts here.
+               </p>
+               <div class="rel" style="margin-top:24px">
+                  <div class="relrow row g-0 align-items-start" style="padding:15px 0px;border-top:1px solid #ece4f3;margin-left:-8px;margin-right:-8px;margin-bottom:-16px">
+                     <div class="relver col-12 col-md-auto" style="font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;font-weight:700;color:#270140;white-space:nowrap;min-width:120px;padding-left:8px;padding-right:8px;margin-bottom:16px">19.0</div>
+                     <div class="col-12 col-md-auto" style="white-space:nowrap;min-width:108px;padding-left:8px;padding-right:8px;margin-bottom:16px"><span class="relbadge rb-new" style="display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:4px 8px;border-radius:6px;color:rgb(255, 255, 255);background-color:#270140">Current</span></div>
+                     <div class="col-12 col-md" style="padding-left:8px;padding-right:8px;margin-bottom:16px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.58">
+                           <b>First release for Odoo 19.0.</b>
+                           <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">is_pinned</span> on
+                           <span class="fld" style="display:inline-block;font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;color:#270140;padding:1px 7px;border-radius:6px;background-color:#f4eef8">mail.message</span> with a toggle
+                           broadcast on the Odoo bus for live updates.
+                           Thumb-tack button on the message bubble plus a
+                           <b>Pin</b> entry in the message actions menu, both
+                           restricted to chatter notes so Odoo's native Discuss
+                           pin is never duplicated. Collapsible
+                           <b>Pinned Messages</b> panel above the chatter with a
+                           count badge, cards ordered newest first, a
+                           <b>See</b> button that jumps to the original, tinted
+                           card styling, and a reload when you move to another
+                           record. 3 automated tests, shipped inside.
+                        </p>
+                     </div>
+                  </div>
+                  <div class="relrow row g-0 align-items-start" style="padding:15px 0px;border-top:1px solid #ece4f3;border-bottom:1px solid #ece4f3;margin-left:-8px;margin-right:-8px;margin-bottom:-16px">
+                     <div class="relver col-12 col-md-auto" style="font-family:ui-monospace, &quot;SF Mono&quot;, Menlo, Consolas, monospace;font-size:12.5px;font-weight:700;color:#270140;white-space:nowrap;min-width:120px;padding-left:8px;padding-right:8px;margin-bottom:16px">Next</div>
+                     <div class="col-12 col-md-auto" style="white-space:nowrap;min-width:108px;padding-left:8px;padding-right:8px;margin-bottom:16px">
+                        <span class="relbadge rb-next" style="display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;padding:4px 8px;border-radius:6px;color:#270140;background-color:#f4eef8">In progress</span>
+                     </div>
+                     <div class="col-12 col-md" style="padding-left:8px;padding-right:8px;margin-bottom:16px">
+                        <p style="margin:0px;font-size:13.5px;line-height:1.58">
+                           The two gaps named above: an optional permission
+                           group controlling who may pin and unpin, and
+                           translation files so the panel is not English-only.
+                           Also under review: showing who pinned a message and
+                           when, and a way to see all pinned messages across
+                           records in one list. Tell us which matters most to
+                           you and it moves up.
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         <!-- ============================== FINAL CTA ============================== -->
+         <section class="sec" style="padding:58px 0px;border-top:1px solid #ece4f3">
+            <div class="wrap" style="max-width:1080px;margin:0px auto;padding:0px 24px">
+               <div class="qrcta" style="border-radius:20px;padding:32px 34px 26px;background-color:#270140">
+                  <div class="center" style="text-align:center;max-width:640px;margin:0 auto">
+                     <p class="qr-eyebrow" style="margin:0px 0px 8px;font-size:11.5px;font-weight:800;letter-spacing:0.09em;text-transform:uppercase;color:#fa7268">
+                        Install it and it is on every record
+                     </p>
+                     <h2 style="color:rgb(255, 255, 255);letter-spacing:-0.02em;margin:0px 0px 9px;font-family:inherit;font-size:26px;font-weight:800">Stop retyping the note everyone needs</h2>
+                     <p class="qr-sub" style="margin:0 auto;color:rgba(255, 255, 255, 0.76);font-size:14.5px;line-height:1.58;max-width:680px">
+                        Get it from this page and pin your first note this
+                        afternoon. Or spend half an hour with us first and be
+                        certain it does what you think it does.
+                     </p>
+                  </div>
+                  <div class="qr-grid row g-0" style="margin-top:24px;margin-left:-7px;margin-right:-7px;margin-bottom:-14px">
+                     <div class="col-12 col-md-4" style="min-width:0px;padding-left:7px;padding-right:7px;margin-bottom:14px"><div class="qr-card qr-lead d-flex flex-column" style="border-radius:14px;padding:17px;background-color:rgb(255, 255, 255);height:100%">
+                        <div class="qr-top d-flex align-items-center justify-content-between" style="margin-bottom:10px">
+                           <span class="qr-ico d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;border-radius:9px;background-color:#270140;min-width:32px;margin-right:10px"><img src="./assets/icons/ic-qr-ico-125f22.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span><span class="qr-tag qr-tag-hot" style="font-size:9.5px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:rgb(255, 255, 255);padding:4px 9px;border-radius:9999px;background-color:#fa7268">30 minutes</span>
+                        </div>
+                        <h3 class="qr-h" style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;margin-bottom:10px">Book a demo</h3>
+                        <p class="qr-p" style="margin:0px;font-size:12.5px;line-height:1.5;color:#737373;margin-bottom:10px">
+                           Live Odoo, on the kind of record you use.
+                        </p>
+                        <span class="qr-code" aria-label="QR code for the Doodex booking page" style="display:block;border-radius:10px;padding:10px;margin-top:auto;background-color:#faf7fc;margin-bottom:10px"><img src="./assets/icons/qr-meeting.png" alt="QR code encoding hub.doodex.net/r/meeting" width="98" height="98" style="max-width:100%;display:block;width:98px;height:auto;margin:0px auto"></span>
+                        <a class="pmcbtn pmcbtn-1 qr-btn d-inline-flex align-items-center justify-content-center" style="color:rgb(255, 255, 255);font-weight:700;font-size:12px;text-decoration:none;padding:10px;border-radius:10px;line-height:1.25;width:100%;text-align:center;background-color:#fa7268">hub.doodex.net<wbr style="margin-right:8px">/r/meeting</a>
+                     </div></div>
+                     <div class="col-12 col-md-4" style="min-width:0px;padding-left:7px;padding-right:7px;margin-bottom:14px"><div class="qr-card d-flex flex-column" style="border-radius:14px;padding:17px;background-color:rgb(255, 255, 255);height:100%">
+                        <div class="qr-top d-flex align-items-center justify-content-between" style="margin-bottom:10px">
+                           <span class="qr-ico d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;border-radius:9px;background-color:#270140;min-width:32px;margin-right:10px"><img src="./assets/icons/ic-qr-ico-66f832.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span><span class="qr-tag" style="font-size:9.5px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#270140;padding:4px 9px;border-radius:9999px;background-color:#f4eef8">Written reply</span>
+                        </div>
+                        <h3 class="qr-h" style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;margin-bottom:10px">E-mail the team</h3>
+                        <p class="qr-p" style="margin:0px;font-size:12.5px;line-height:1.5;color:#737373;margin-bottom:10px">
+                           Support and pre-sales share one inbox.
+                        </p>
+                        <a class="qr-code" href="mailto:odoo@doodex.net" aria-label="QR code for the Doodex contact page" style="color:#e85c52;display:block;border-radius:10px;padding:10px;margin-top:auto;background-color:#faf7fc;margin-bottom:10px"><img src="./assets/icons/qr-contact.png" alt="QR code encoding doodex.net/contactus" width="98" height="98" style="max-width:100%;display:block;width:98px;height:auto;margin:0px auto"></a>
+                        <a class="pmcbtn pmcbtn-2 qr-btn d-inline-flex align-items-center justify-content-center" href="mailto:odoo@doodex.net" style="color:#270140;font-weight:700;font-size:12px;text-decoration:none;padding:10px;border-radius:10px;line-height:1.25;width:100%;text-align:center;background-color:rgb(255, 255, 255)">odoo@doodex.net</a>
+                     </div></div>
+                     <div class="col-12 col-md-4" style="min-width:0px;padding-left:7px;padding-right:7px;margin-bottom:14px"><div class="qr-card d-flex flex-column" style="border-radius:14px;padding:17px;background-color:rgb(255, 255, 255);height:100%">
+                        <div class="qr-top d-flex align-items-center justify-content-between" style="margin-bottom:10px">
+                           <span class="qr-ico d-inline-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;border-radius:9px;background-color:#270140;min-width:32px;margin-right:10px"><img src="./assets/icons/ic-qr-ico-dacd0d.png" width="17" height="17" alt="" loading="lazy" style="max-width:none;display:inline-block;width:17px;height:17px;vertical-align:middle"></span><span class="qr-tag" style="font-size:9.5px;font-weight:800;letter-spacing:0.07em;text-transform:uppercase;color:#270140;padding:4px 9px;border-radius:9999px;background-color:#f4eef8">Fastest reply</span>
+                        </div>
+                        <h3 class="qr-h" style="color:#270140;letter-spacing:-0.015em;margin:0px;font-family:inherit;font-size:15.5px;margin-bottom:10px">WhatsApp</h3>
+                        <p class="qr-p" style="margin:0px;font-size:12.5px;line-height:1.5;color:#737373;margin-bottom:10px">
+                           For the quick yes-or-no before buying.
+                        </p>
+                        <span class="qr-code" aria-label="QR code for the Doodex WhatsApp line" style="display:block;border-radius:10px;padding:10px;margin-top:auto;background-color:#faf7fc;margin-bottom:10px"><img src="./assets/icons/qr-whatsapp.png" alt="QR code encoding hub.doodex.net/r/whatsapp" width="98" height="98" style="max-width:100%;display:block;width:98px;height:auto;margin:0px auto"></span>
+                        <a class="pmcbtn pmcbtn-2 qr-btn d-inline-flex align-items-center justify-content-center" style="color:#270140;font-weight:700;font-size:12px;text-decoration:none;padding:10px;border-radius:10px;line-height:1.25;width:100%;text-align:center;background-color:rgb(255, 255, 255)">hub.doodex.net<wbr style="margin-right:8px">/r/whatsapp</a>
+                     </div></div>
+                  </div>
+                  <p class="qr-foot center" style="margin:18px 0px 0px;text-align:center;color:rgba(255, 255, 255, 0.5);font-size:12px">
+                     Scan a code with your phone camera to open the link. The
+                     address printed beside each code is the same destination
+                     typed out.
+                  </p>
+               </div>
+            </div>
+         </section>
+      </div>
 </body>
 </html>
