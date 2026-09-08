@@ -9,7 +9,10 @@
     'depends': ['web', 'base', 'mail'],
     'data': [
     ],
-    'images': ["static/description/banner.png"],
+    'images': [
+       'static/description/banner.gif',
+       'static/description/icon.png',
+    ],
     "assets": {
         "web.assets_backend":
             [
