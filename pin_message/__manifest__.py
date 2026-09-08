@@ -8,7 +8,10 @@
     'website': "https://www.doodex.net/",
     'depends': ['web', 'base', 'mail'],
     'data': [],
-    'images': ["static/description/banner.png"],
+    'images': [
+       'static/description/banner.gif',
+       'static/description/icon.png',
+    ],
     'assets': {
         'web.assets_backend': [
             'pin_message/static/src/xml/message_pin.xml',
